@@ -23,6 +23,7 @@ app.use(
     })
 );
 
+// All routes
 const cameraRoutes = require('./routes/cameras')
 
 async function main() {
