@@ -23,8 +23,10 @@ app.use(
     })
 );
 
-async function main() {
+const productRoutes = require('./routes/products')
 
+async function main() {
+    app.use('/products', productRoutes)
 }
 
 main();
