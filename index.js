@@ -23,10 +23,10 @@ app.use(
     })
 );
 
-const productRoutes = require('./routes/products')
+const cameraRoutes = require('./routes/cameras')
 
 async function main() {
-    app.use('/products', productRoutes)
+    app.use('/cameras', cameraRoutes)
 }
 
 main();
