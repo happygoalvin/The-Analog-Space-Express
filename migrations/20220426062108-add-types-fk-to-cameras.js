@@ -15,24 +15,16 @@ exports.setup = function (options, seedLink) {
 };
 
 exports.up = function (db) {
-  return db.createTable('classifications', {
-    id: {
-      type: 'int',
-      autoIncrement: true,
-      primaryKey: true,
-      unsigned: true,
-      notNull: true
-    },
-    name: {
-      type: 'string',
-      length: '100',
-      notNull: true
-    }
-  })
+  return db.addForeignKey('cameras', 'types', 'camera_type_fk', {
+    'type_id': 'id'
+  }, {
+    onDelete: 'CASCADE',
+    onUpdate: 'RESTRICT'
+  });
 };
 
 exports.down = function (db) {
-  return db.dropTable('classifications')
+  return null;
 };
 
 exports._meta = {

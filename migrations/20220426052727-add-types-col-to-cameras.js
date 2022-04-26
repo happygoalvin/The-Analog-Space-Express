@@ -15,23 +15,16 @@ exports.setup = function (options, seedLink) {
 };
 
 exports.up = function (db) {
-  return db.createTable('type', {
-    id: {
-      type: 'int',
-      primaryKey: true,
-      autoIncrement: true,
-      notNull: true
-    },
-    name: {
-      type: 'string',
-      length: '100',
-      notNull: true
-    }
+  return db.addColumn('cameras', 'type_id', {
+    type: 'int',
+    unsigned: true,
+    notNull: true,
   })
 };
 
-exports.down = function (db) {
-  return db.dropTable('type')
+exports.down = async function (db) {
+  await db.removeForeignKey('type_id');
+  db.dropColumn('type_id')
 };
 
 exports._meta = {

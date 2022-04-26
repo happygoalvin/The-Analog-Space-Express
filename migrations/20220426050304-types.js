@@ -15,11 +15,11 @@ exports.setup = function (options, seedLink) {
 };
 
 exports.up = function (db) {
-  return db.createTable('classifications', {
+  return db.createTable('types', {
     id: {
       type: 'int',
-      autoIncrement: true,
       primaryKey: true,
+      autoIncrement: true,
       unsigned: true,
       notNull: true
     },
@@ -32,7 +32,7 @@ exports.up = function (db) {
 };
 
 exports.down = function (db) {
-  return db.dropTable('classifications')
+  return db.dropTable('types')
 };
 
 exports._meta = {

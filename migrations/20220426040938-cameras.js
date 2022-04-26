@@ -63,7 +63,8 @@ exports.up = function (db) {
       notNull: false
     },
     flash: {
-      type: 'boolean',
+      type: 'string',
+      length: '30',
       notNull: false
     },
     battery: {
