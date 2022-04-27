@@ -40,8 +40,12 @@ router.get('/', async (req, res) => {
     })
 })
 
-router.get('/create', (req, res) => {
-    const cameraForm = createCameraForm()
+router.get('/create', async (req, res) => {
+
+    const allTypes = await getAllTypes();
+    const allClassifications = await getAllClassifications();
+
+    const cameraForm = createCameraForm(allTypes, allClassifications)
     res.render('cameras/create', {
         form: cameraForm.toHTML(bootstrapField)
     })

@@ -37,7 +37,7 @@ exports.up = function (db) {
         }
       }
     },
-    tag_id: {
+    classification_id: {
       type: 'int',
       notNull: true,
       unsigned: true,
