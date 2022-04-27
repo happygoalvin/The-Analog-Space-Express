@@ -15,7 +15,7 @@ exports.setup = function (options, seedLink) {
 };
 
 exports.up = function (db) {
-  return db.createTable('cameras_classifications', {
+  return db.createTable('cameras_films', {
     id: {
       type: 'int',
       primaryKey: true,
@@ -28,7 +28,7 @@ exports.up = function (db) {
       notNull: true,
       unsigned: true,
       foreignKey: {
-        name: 'cameras_classifications_camera_fk',
+        name: 'cameras_films_camera_fk',
         table: 'cameras',
         mapping: 'id',
         rules: {
@@ -37,13 +37,13 @@ exports.up = function (db) {
         }
       }
     },
-    classification_id: {
+    film_id: {
       type: 'int',
       notNull: true,
       unsigned: true,
       foreignKey: {
-        name: 'cameras_classifications_classification_fk',
-        table: 'classifications',
+        name: 'cameras_films_film_fk',
+        table: 'films',
         mapping: 'id',
         rules: {
           onDelete: 'cascade',
