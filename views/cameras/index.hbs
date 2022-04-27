@@ -2,6 +2,48 @@
 
 {{#block "content"}}
 <h1>Camera Products</h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>created_date</th>
+            <th>ISO</th>
+            <th>Shutter Speed</th>
+            <th>Aperture</th>
+            <th>Focal Length</th>
+            <th>Flash</th>
+            <th>Battery</th>
+            <th>Body Color</th>
+            <th>Format</th>
+            <th>Weight</th>
+            <th>Description</th>
+            <th>Stock</th>
+            <th>Cost</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each cameras}}
+        <tr>
+            <td>{{this.name}}</td>
+            <td>{{this.type.name}}</td>
+            <td>{{this.created_date}}</td>
+            <td>{{this.ISO}}</td>
+            <td>{{this.shutter_speed}}</td>
+            <td>{{this.aperture}}</td>
+            <td>{{this.focal_length}}</td>
+            <td>{{this.flash}}</td>
+            <td>{{this.battery}}</td>
+            <td>{{this.body_color}}</td>
+            <td>{{this.format}}</td>
+            <td>{{this.weight}}</td>
+            <td>{{this.Description}}</td>
+            <td>{{this.stock}}</td>
+            <td>{{this.cost}}</td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
 {{/block}}
 
 {{/extends}}
