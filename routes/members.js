@@ -1,5 +1,12 @@
 const express = require('express');
 const router = express.Router();
+const crypto = require('crypto');
+
+const getHashedPassword = (password) => {
+    const sha256 = crypto.createHash('sha256');
+    const hash = sha256.update(password).digest('base64');
+    return hash;
+}
 
 const {
     User
@@ -10,6 +17,10 @@ const {
     loginForm,
     bootstrapField
 } = require('../forms');
+
+const {
+    checkIfAuthenticated
+} = require('../middlewares')
 
 router.get('/register', (req, res) => {
     const registration = registrationForm();
@@ -27,7 +38,7 @@ router.post('/register', (req, res) => {
                 first_name: form.data.first_name,
                 last_name: form.data.last_name,
                 email: form.data.email,
-                password: form.data.password,
+                password: getHashedPassword(form.data.password),
                 role: 'Admin'
             });
             await user.save();
@@ -63,7 +74,7 @@ router.post('/login', (req, res) => {
                 req.flash("error_messages", `Please enter your login details`)
                 res.redirect('/members/login');
             } else {
-                if (user.get('password') === form.data.password) {
+                if (user.get('password') === getHashedPassword(form.data.password)) {
                     req.session.user = {
                         id: user.get('id'),
                         first_name: user.get('first_name'),
@@ -86,7 +97,7 @@ router.post('/login', (req, res) => {
     })
 })
 
-router.get('/profile', (req, res) => {
+router.get('/profile', checkIfAuthenticated, (req, res) => {
     const user = req.session.user;
     if (!user) {
         req.flash("error_messages", `Please login to view this page`);

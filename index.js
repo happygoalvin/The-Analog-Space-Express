@@ -56,8 +56,12 @@ app.use(cors());
 const cameraRoutes = require('./routes/cameras')
 const memberRoutes = require('./routes/members')
 
+const {
+    checkIfAuthenticated
+} = require('./middlewares')
+
 async function main() {
-    app.use('/cameras', cameraRoutes)
+    app.use('/cameras', checkIfAuthenticated, cameraRoutes)
     app.use('/members', memberRoutes)
 }
 
