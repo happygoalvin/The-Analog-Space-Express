@@ -49,7 +49,7 @@ async function getAllManufacturers() {
 
 router.get('/', async (req, res) => {
     let cameras = await Camera.collection().fetch({
-        withRelated: ['type']
+        withRelated: ['type', 'manufacturer', 'film', 'classification']
     });
     res.render('cameras/index', {
         'cameras': cameras.toJSON()
@@ -137,14 +137,14 @@ router.get('/:camera_id/update', async (req, res) => {
     cameraForm.fields.format.value = camera.get('format');
     cameraForm.fields.weight.value = camera.get('weight');
 
-    let selectedClassifications = await camera.related('classifications').pluck('id');
+    let selectedClassifications = await camera.related('classification').pluck('id');
     cameraForm.fields.classifications.value = selectedClassifications;
 
-    let selectedFilms = await camera.related('films').pluck('id');
+    let selectedFilms = await camera.related('film').pluck('id');
     cameraForm.fields.films.value = selectedFilms;
 
     res.render('cameras/update', {
-        form: form.toHTML(bootstrapField),
+        form: cameraForm.toHTML(bootstrapField),
         camera: camera.toJSON()
     })
 
