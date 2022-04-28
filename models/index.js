@@ -54,11 +54,16 @@ const Image = bookshelf.model('Image', {
     }
 })
 
+const User = bookshelf.model('User', {
+    tableName: 'users'
+})
+
 module.exports = {
     Camera,
     Type,
     Classification,
     Manufacturer,
     Film,
-    Image
+    Image,
+    User
 };

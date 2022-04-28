@@ -70,13 +70,13 @@ const createCameraForm = (types, classifications, manufacturers, films) => {
             required: true,
             errorAfterField: true,
             widget: widgets.number(),
-            validators: [validators.integer()]
+            validators: [validators.integer(), validators.min(0)]
         }),
         cost: fields.number({
             required: true,
             errorAfterField: true,
             widget: widgets.number(),
-            validators: [validators.integer()]
+            validators: [validators.integer(), validators.min(0)]
         }),
         camera_ISO: fields.string({
             required: false,
@@ -117,7 +117,7 @@ const createCameraForm = (types, classifications, manufacturers, films) => {
             required: false,
             errorAfterField: true,
             widget: widgets.number(),
-            validators: [validators.integer()]
+            validators: [validators.integer(), validators.min(0)]
         }),
         classifications: fields.string({
             required: true,
@@ -134,7 +134,39 @@ const createCameraForm = (types, classifications, manufacturers, films) => {
     })
 }
 
+const registrationForm = () => {
+    return forms.create({
+        first_name: fields.string({
+            required: true,
+            errorAfterField: true
+        }),
+        last_name: fields.string({
+            required: true,
+            errorAfterField: true
+        }),
+        email: fields.email({
+            required: true,
+            errorAfterField: true,
+            widget: widgets.email(),
+            validators: [validators.email()]
+        }),
+        password: fields.password({
+            required: true,
+            errorAfterField: true,
+            widget: widgets.password(),
+            validators: [validators.minlength(0), validators.maxlength(16)]
+        }),
+        confirm_password: fields.password({
+            required: true,
+            errorAfterField: true,
+            widget: widgets.password(),
+            validators: [validators.matchField('password')]
+        })
+    })
+}
+
 module.exports = {
     createCameraForm,
+    registrationForm,
     bootstrapField
 }
