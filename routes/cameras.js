@@ -104,6 +104,7 @@ router.post('/create', async (req, res) => {
             if (films) {
                 await camera.film().attach(films.split(","));
             }
+            req.flash("success_messages", `${camera.get('name')} has been successfully added to the catalogue`)
 
             res.redirect('/cameras')
         },
@@ -188,6 +189,7 @@ router.post('/:camera_id/update', async (req, res) => {
             await camera.classification().attach(selectedClassificationId);
             await camera.film().attach(selectedFilmId);
 
+            req.flash("success_messages", `${camera.get('name')} has been successfully updated`)
             res.redirect('/cameras')
         },
         error: async (form) => {
@@ -211,7 +213,7 @@ router.get('/:camera_id/delete', async (req, res) => {
 router.post('/:camera_id/delete', async (req, res) => {
     const camera = await getCameraById(req.params.camera_id);
     await camera.destroy();
-
+    req.flash("success_messages", `Selected camera has been successfully deleted`)
     res.redirect('/cameras')
 })
 module.exports = router;

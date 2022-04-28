@@ -4,6 +4,11 @@ const wax = require("wax-on");
 const cors = require("cors");
 require("dotenv").config();
 
+// import sessions
+const session = require('express-session');
+const flash = require('connect-flash');
+const FileStore = require('session-file-store')(session);
+
 // create an instance of express app
 let app = express();
 
@@ -23,6 +28,26 @@ app.use(
         extended: false
     })
 );
+
+// setup sessions
+app.use(session({
+    'store': new FileStore(),
+    'secret': 'keyboard cat',
+    'resave': false,
+    'saveUninitialized': true
+}))
+
+// setup flash message
+app.use(flash());
+
+// display in the hbs file
+app.use(function (req, res, next) {
+    // transfer any success messages stored in the session
+    // to the variables in hbs files
+    res.locals.success_messages = req.flash("success_messages");
+    res.locals.error_messages = req.flash('error_messages');
+    next();
+})
 
 // enable cors
 app.use(cors());
