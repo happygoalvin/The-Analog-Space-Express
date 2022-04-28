@@ -45,6 +45,16 @@ async function getAllManufacturers() {
     })
     return allManufacturers;
 }
+
+async function getCameraById(cameraId) {
+    const camera = await Camera.where({
+        id: cameraId
+    }).fetch({
+        require: true,
+        withRelated: ['type', 'manufacturer', 'film', 'classification']
+    });
+    return camera;
+}
 // REFACTORED CODE END
 
 router.get('/', async (req, res) => {
@@ -106,13 +116,8 @@ router.post('/create', async (req, res) => {
 })
 
 router.get('/:camera_id/update', async (req, res) => {
-    const cameraId = req.params.camera_id;
-    const camera = await Camera.where({
-        id: cameraId
-    }).fetch({
-        require: true
-    });
 
+    const camera = await getCameraById(req.params.camera_id);
     const allTypes = await getAllTypes();
     const allClassifications = await getAllClassifications();
     const allManufacturers = await getAllManufacturers();
@@ -145,9 +150,53 @@ router.get('/:camera_id/update', async (req, res) => {
 
     res.render('cameras/update', {
         form: cameraForm.toHTML(bootstrapField),
-        camera: camera.toJSON()
+        cameras: camera.toJSON()
     })
+})
 
+router.post('/:camera_id/update', async (req, res) => {
+
+    const camera = await getCameraById(req.params.camera_id);
+    const allTypes = await getAllTypes();
+    const allClassifications = await getAllClassifications();
+    const allManufacturers = await getAllManufacturers();
+    const allFilms = await getAllFilms();
+
+    const cameraForm = createCameraForm(allTypes, allClassifications, allManufacturers, allFilms);
+    cameraForm.handle(req, {
+        success: async (form) => {
+            let {
+                classifications,
+                films,
+                ...cameraData
+            } = form.data;
+            camera.set(cameraData)
+            await camera.save();
+
+            let selectedClassificationId = classifications.split(',');
+            let selectedFilmId = films.split(',');
+
+            let existingClassifications = await camera.related('classification').pluck('id');
+            let existingFilms = await camera.related('film').pluck('id');
+
+            let removeClassifications = existingClassifications.filter(id => selectedClassificationId.includes(id) === false);
+            let removeFilms = existingFilms.filter(id => selectedFilmId.includes(id) === false);
+
+            await camera.classification().detach(removeClassifications);
+            await camera.film().detach(removeFilms);
+
+            await camera.classification().attach(selectedClassificationId);
+            await camera.film().attach(selectedFilmId);
+
+            res.redirect('/cameras')
+        },
+        error: async (form) => {
+            res.render('cameras/update', {
+                form: form.toHTML(bootstrapField),
+                cameras: camera.toJSON()
+            })
+        }
+    })
 })
 
 module.exports = router;
