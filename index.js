@@ -54,9 +54,11 @@ app.use(cors());
 
 // All routes
 const cameraRoutes = require('./routes/cameras')
+const memberRoutes = require('./routes/members')
 
 async function main() {
     app.use('/cameras', cameraRoutes)
+    app.use('/members', memberRoutes)
 }
 
 main();
