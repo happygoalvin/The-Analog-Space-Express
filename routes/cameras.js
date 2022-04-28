@@ -23,28 +23,28 @@ async function getAllTypes() {
         return [type.get('id'), type.get('name')]
     })
     return allTypes;
-}
+};
 
 async function getAllClassifications() {
     const allClassifications = await Classification.fetchAll().map(classification => {
         return [classification.get('id'), classification.get('name')]
     })
     return allClassifications;
-}
+};
 
 async function getAllFilms() {
     const allFilms = await Film.fetchAll().map(film => {
         return [film.get('id'), film.get('name')]
     })
     return allFilms;
-}
+};
 
 async function getAllManufacturers() {
     const allManufacturers = await Manufacturer.fetchAll().map(manufacturer => {
         return [manufacturer.get('id'), manufacturer.get('name')]
     })
     return allManufacturers;
-}
+};
 
 async function getCameraById(cameraId) {
     const camera = await Camera.where({
@@ -54,17 +54,17 @@ async function getCameraById(cameraId) {
         withRelated: ['type', 'manufacturer', 'film', 'classification']
     });
     return camera;
-}
+};
 // REFACTORED CODE END
 
 router.get('/', async (req, res) => {
-    let cameras = await Camera.collection().fetch({
+    const cameras = await Camera.collection().fetch({
         withRelated: ['type', 'manufacturer', 'film', 'classification']
     });
     res.render('cameras/index', {
-        'cameras': cameras.toJSON()
+        'camera': cameras.toJSON()
     })
-})
+});
 
 router.get('/create', async (req, res) => {
 
@@ -77,7 +77,7 @@ router.get('/create', async (req, res) => {
     res.render('cameras/create', {
         form: cameraForm.toHTML(bootstrapField)
     })
-})
+});
 
 router.post('/create', async (req, res) => {
 
@@ -113,7 +113,7 @@ router.post('/create', async (req, res) => {
             })
         }
     })
-})
+});
 
 router.get('/:camera_id/update', async (req, res) => {
 
@@ -150,9 +150,9 @@ router.get('/:camera_id/update', async (req, res) => {
 
     res.render('cameras/update', {
         form: cameraForm.toHTML(bootstrapField),
-        cameras: camera.toJSON()
+        camera: camera.toJSON()
     })
-})
+});
 
 router.post('/:camera_id/update', async (req, res) => {
 
@@ -193,10 +193,25 @@ router.post('/:camera_id/update', async (req, res) => {
         error: async (form) => {
             res.render('cameras/update', {
                 form: form.toHTML(bootstrapField),
-                cameras: camera.toJSON()
+                camera: camera.toJSON()
             })
         }
     })
-})
+});
 
+router.get('/:camera_id/delete', async (req, res) => {
+
+    const camera = await getCameraById(req.params.camera_id);
+
+    res.render('cameras/delete', {
+        camera: camera.toJSON()
+    })
+});
+
+router.post('/:camera_id/delete', async (req, res) => {
+    const camera = await getCameraById(req.params.camera_id);
+    await camera.destroy();
+
+    res.redirect('/cameras')
+})
 module.exports = router;
