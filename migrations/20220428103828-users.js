@@ -25,11 +25,11 @@ exports.up = function (db) {
     },
     password: {
       type: 'string',
-      length: '20',
+      length: '80',
     },
     role: {
       type: 'string',
-      length: '10',
+      length: '20',
     },
     first_name: {
       type: 'string',
@@ -41,7 +41,7 @@ exports.up = function (db) {
     },
     email: {
       type: 'string',
-      length: '200'
+      length: '320'
     }
   })
 };

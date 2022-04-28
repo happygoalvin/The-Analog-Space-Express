@@ -9,6 +9,9 @@ const session = require('express-session');
 const flash = require('connect-flash');
 const FileStore = require('session-file-store')(session);
 
+// import csurf
+const csrf = require('csurf');
+
 // create an instance of express app
 let app = express();
 
@@ -52,6 +55,33 @@ app.use(function (req, res, next) {
 // enable cors
 app.use(cors());
 
+// enable CSRF
+app.use(csrf());
+
+// Handle CSRF errors
+app.use((err, req, res, next) => {
+    if (err && err.code == "EBADCSRFTOKEN") {
+        req.flash('error_messages', 'The form has expired. Please try again');
+        res.redirect('back');
+    } else {
+        next();
+    }
+})
+
+// Share CSRF with HBS files
+app.use((req, res, next) => {
+    res.locals.csrfToken = req.csrfToken();
+    next();
+})
+
+// Share user data with HBS files
+app.use((req, res, next) => {
+    res.locals.user = req.session.user;
+    next();
+})
+
+
+
 // All routes
 const cameraRoutes = require('./routes/cameras')
 const memberRoutes = require('./routes/members')
@@ -59,6 +89,7 @@ const memberRoutes = require('./routes/members')
 const {
     checkIfAuthenticated
 } = require('./middlewares')
+
 
 async function main() {
     app.use('/cameras', checkIfAuthenticated, cameraRoutes)
