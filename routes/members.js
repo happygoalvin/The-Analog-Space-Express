@@ -99,4 +99,10 @@ router.get('/profile', (req, res) => {
 
 })
 
+router.get('/logout', (req, res) => {
+    req.session.user = null;
+    req.flash("success_messages", `You have successfully logged out.`);
+    res.redirect('/members/login')
+})
+
 module.exports = router;
