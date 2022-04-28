@@ -43,8 +43,8 @@ exports.up = function (db) {
     },
     description: 'text',
     camera_iso: {
-      type: 'smallint',
-      unsigned: true,
+      type: 'string',
+      length: '30',
       notNull: false
     },
     shutter_speed: {

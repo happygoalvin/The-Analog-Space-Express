@@ -34,21 +34,21 @@ const Classification = bookshelf.model('Classification', {
 })
 
 const Manufacturer = bookshelf.model('Manufacturer', {
-    tableName: 'Manufacturer',
+    tableName: 'manufacturers',
     camera: function () {
         return this.hasMany('Camera')
     }
 })
 
 const Film = bookshelf.model('Film', {
-    tableName: 'Films',
+    tableName: 'films',
     camera: function () {
         return this.belongsToMany('Camera')
     }
 })
 
 const Image = bookshelf.model('Image', {
-    tableName: 'Images',
+    tableName: 'images',
     camera: function () {
         return this.belongsTo('Camera')
     }

@@ -30,83 +30,106 @@ var bootstrapField = function (name, object) {
     return '<div class="form-group">' + label + widget + error + '</div>';
 };
 
-const createCameraForm = (types, classifications) => {
+const createCameraForm = (types, classifications, manufacturers, films) => {
     return forms.create({
         name: fields.string({
             required: true,
             errorAfterField: true,
-            widget: widgets.text()
-        }),
-        created_date: fields.date({
-            required: true,
-            errorAfterField: true,
-            widget: widgets.date()
-        }),
-        description: fields.string({
-            required: true,
-            errorAfterField: true,
-            widget: widgets.textarea()
-        }),
-        stock: fields.number({
-            required: true,
-            errorAfterField: true,
-            widget: widgets.number()
-        }),
-        cost: fields.number({
-            required: true,
-            errorAfterField: true,
-            widget: widgets.number()
-        }),
-        camera_iso: fields.number({
-            required: false,
-            errorAfterField: false,
-            widget: widgets.number()
-        }),
-        shutter_speed: fields.string({
-            required: false,
-            errorAfterField: false,
-        }),
-        aperture: fields.string({
-            required: false,
-            errorAfterField: false
-        }),
-        focal_length: fields.string({
-            required: false,
-            errorAfterField: false
-        }),
-        flash: fields.string({
-            required: false,
-            errorAfterField: false
-        }),
-        battery: fields.string({
-            required: false,
-            errorAfterField: false
-        }),
-        body_color: fields.string({
-            required: false,
-            errorAfterField: false
-        }),
-        format: fields.string({
-            required: false,
-            errorAfterField: false
-        }),
-        weight: fields.number({
-            required: false,
-            errorAfterField: false,
-            widget: widgets.number()
+            widget: widgets.text(),
         }),
         type_id: fields.string({
             label: 'Type',
             required: true,
             errorAfterField: true,
-            widget: widgets.select(),
-            choices: types
+            widget: widgets.select({
+                classes: ['form-select']
+            }),
+            choices: types,
+        }),
+        manufacturer_id: fields.string({
+            label: 'Manufacturer',
+            required: true,
+            errorAfterField: true,
+            widget: widgets.select({
+                classes: ['form-select']
+            }),
+            choices: manufacturers,
+        }),
+        created_date: fields.date({
+            required: true,
+            errorAfterField: true,
+            widget: widgets.date(),
+            validators: [validators.date()]
+        }),
+        description: fields.string({
+            required: true,
+            errorAfterField: true,
+            widget: widgets.textarea(),
+        }),
+        stock: fields.number({
+            required: true,
+            errorAfterField: true,
+            widget: widgets.number(),
+            validators: [validators.integer()]
+        }),
+        cost: fields.number({
+            required: true,
+            errorAfterField: true,
+            widget: widgets.number(),
+            validators: [validators.integer()]
+        }),
+        camera_ISO: fields.string({
+            required: false,
+            errorAfterField: true,
+        }),
+        shutter_speed: fields.string({
+            required: false,
+            errorAfterField: true
+        }),
+        aperture: fields.string({
+            required: false,
+            errorAfterField: true,
+            validators: [validators.alphanumeric()]
+        }),
+        focal_length: fields.string({
+            required: false,
+            errorAfterField: true,
+            validators: [validators.alphanumeric()]
+        }),
+        flash: fields.string({
+            required: false,
+            errorAfterField: true
+        }),
+        battery: fields.string({
+            required: false,
+            errorAfterField: true
+        }),
+        body_color: fields.string({
+            required: false,
+            errorAfterField: true
+        }),
+        format: fields.string({
+            required: false,
+            errorAfterField: true,
+            validators: [validators.alphanumeric()]
+        }),
+        weight: fields.number({
+            required: false,
+            errorAfterField: true,
+            widget: widgets.number(),
+            validators: [validators.integer()]
         }),
         classifications: fields.string({
             required: true,
             errorAfterField: true,
             widget: widgets.multipleSelect(),
             choices: classifications
+        }),
+        films: fields.string({
+            required: true,
+            errorAfterField: true,
+            widget: widgets.multipleSelect(),
+            choices: films
         })
     })
 }

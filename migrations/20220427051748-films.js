@@ -26,14 +26,6 @@ exports.up = function (db) {
     name: {
       type: 'string',
       length: '100',
-    },
-    film_iso: {
-      type: 'smallint',
-      unsigned: true,
-    },
-    color: {
-      type: 'string',
-      length: '30'
     }
   })
 };
