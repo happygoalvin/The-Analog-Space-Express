@@ -71,7 +71,7 @@ router.post('/login', (req, res) => {
             });
 
             if (!user) {
-                req.flash("error_messages", `Please enter your login details`)
+                req.flash("error_messages", `Invalid login details. Please re-enter your login details`)
                 res.redirect('/members/login');
             } else {
                 if (user.get('password') === getHashedPassword(form.data.password)) {
