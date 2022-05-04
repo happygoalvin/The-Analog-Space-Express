@@ -9,6 +9,10 @@ class CartServices {
         return await cartDataLayer.getCart(this.user_id);
     }
 
+    async getUser() {
+        return await cartDataLayer.getUser(this.user_id);
+    }
+
     async addToCart(cameraId, quantity) {
         let cartItem = await cartDataLayer.getCartItemByUserAndProduct(
             this.user_id, productId

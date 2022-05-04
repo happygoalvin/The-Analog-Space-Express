@@ -56,7 +56,13 @@ app.use(function (req, res, next) {
 app.use(cors());
 
 // enable CSRF
-app.use(csrf());
+const csurfInstance = csrf();
+app.use(function (req, res, next) {
+    if (req.url === "/checkout/process_payment") {
+        return next();
+    }
+    csurfInstance(req, res, next);
+})
 
 // Handle CSRF errors
 app.use((err, req, res, next) => {
@@ -70,7 +76,9 @@ app.use((err, req, res, next) => {
 
 // Share CSRF with HBS files
 app.use((req, res, next) => {
-    res.locals.csrfToken = req.csrfToken();
+    if (req.csrfToken) {
+        res.locals.csrfToken = req.csrfToken();
+    }
     next();
 })
 
@@ -88,7 +96,8 @@ const memberRoutes = require('./routes/members')
 const cloudinaryRoutes = require('./routes/cloudinary')
 
 const api = {
-    carts: require('./routes/api/carts')
+    carts: require('./routes/api/carts'),
+    checkout: require('./routes/api/checkout')
 }
 
 const {
@@ -101,6 +110,7 @@ async function main() {
     app.use('/members', memberRoutes)
     app.use('/cloudinary', cloudinaryRoutes)
     app.use('/cart', express.json(), api.carts)
+    app.use('/checkout', express.json(), api.checkout)
 }
 
 main();
