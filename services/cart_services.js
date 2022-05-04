@@ -14,7 +14,7 @@ class CartServices {
             this.user_id, productId
         )
         if (cartItem) {
-            await cartDataLayer.updateQuantity(
+            return await cartDataLayer.updateQuantity(
                 this.user_id,
                 cameraId,
                 cartItem.get('quantity') + quantity

@@ -44,7 +44,7 @@ async function updateQuantity(userId, cameraId, newQuantity) {
     if (cartItem) {
         cartItem.set('quantity', newQuantity);
         cartItem.save();
-        return true;
+        return cartItem;
     }
     return false;
 }

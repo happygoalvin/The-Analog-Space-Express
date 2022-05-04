@@ -87,6 +87,10 @@ const cameraRoutes = require('./routes/cameras')
 const memberRoutes = require('./routes/members')
 const cloudinaryRoutes = require('./routes/cloudinary')
 
+const api = {
+    carts: require('./routes/api/carts')
+}
+
 const {
     checkIfAuthenticated
 } = require('./middlewares')
@@ -96,6 +100,7 @@ async function main() {
     app.use('/cameras', checkIfAuthenticated, cameraRoutes)
     app.use('/members', memberRoutes)
     app.use('/cloudinary', cloudinaryRoutes)
+    app.use('/cart', express.json(), api.carts)
 }
 
 main();
