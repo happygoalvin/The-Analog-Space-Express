@@ -1,7 +1,4 @@
 const express = require('express');
-const {
-    trigger
-} = require('../bookshelf');
 const router = express.Router();
 
 // FORMS
@@ -20,45 +17,8 @@ const {
     Film
 } = require('../models')
 
-// REFACTORED CODE
-async function getAllTypes() {
-    const allTypes = await Type.fetchAll().map(type => {
-        return [type.get('id'), type.get('name')]
-    })
-    return allTypes;
-};
-
-async function getAllClassifications() {
-    const allClassifications = await Classification.fetchAll().map(classification => {
-        return [classification.get('id'), classification.get('name')]
-    })
-    return allClassifications;
-};
-
-async function getAllFilms() {
-    const allFilms = await Film.fetchAll().map(film => {
-        return [film.get('id'), film.get('name')]
-    })
-    return allFilms;
-};
-
-async function getAllManufacturers() {
-    const allManufacturers = await Manufacturer.fetchAll().map(manufacturer => {
-        return [manufacturer.get('id'), manufacturer.get('name')]
-    })
-    return allManufacturers;
-};
-
-async function getCameraById(cameraId) {
-    const camera = await Camera.where({
-        id: cameraId
-    }).fetch({
-        require: true,
-        withRelated: ['type', 'manufacturer', 'film', 'classification']
-    });
-    return camera;
-};
-// REFACTORED CODE END
+// Data Access Layer (DAL)
+const cameraDataLayer = require('../dal/cameras')
 
 router.get('/', async (req, res) => {
     // const cameras = await Camera.collection().fetch({
@@ -68,13 +28,13 @@ router.get('/', async (req, res) => {
     //     'camera': cameras.toJSON()
     // })
 
-    const allTypes = await getAllTypes();
+    const allTypes = await cameraDataLayer.getAllTypes();
     allTypes.unshift(["", '----']);
 
-    const allManufacturers = await getAllManufacturers();
+    const allManufacturers = await cameraDataLayer.getAllManufacturers();
     allManufacturers.unshift(["", '----']);
 
-    const allFilms = await getAllFilms();
+    const allFilms = await cameraDataLayer.getAllFilms();
 
     let search = searchForm(allTypes, allManufacturers, allFilms)
 
@@ -134,10 +94,10 @@ router.get('/', async (req, res) => {
 
 router.get('/create', async (req, res) => {
 
-    const allTypes = await getAllTypes();
-    const allClassifications = await getAllClassifications();
-    const allManufacturers = await getAllManufacturers();
-    const allFilms = await getAllFilms();
+    const allTypes = await cameraDataLayer.getAllTypes();
+    const allClassifications = await cameraDataLayer.getAllClassifications();
+    const allManufacturers = await cameraDataLayer.getAllManufacturers();
+    const allFilms = await cameraDataLayer.getAllFilms();
 
     const cameraForm = createCameraForm(allTypes, allClassifications, allManufacturers, allFilms)
     res.render('cameras/create', {
@@ -150,10 +110,10 @@ router.get('/create', async (req, res) => {
 
 router.post('/create', async (req, res) => {
 
-    const allTypes = await getAllTypes();
-    const allClassifications = await getAllClassifications();
-    const allManufacturers = await getAllManufacturers();
-    const allFilms = await getAllFilms();
+    const allTypes = await cameraDataLayer.getAllTypes();
+    const allClassifications = await cameraDataLayer.getAllClassifications();
+    const allManufacturers = await cameraDataLayer.getAllManufacturers();
+    const allFilms = await cameraDataLayer.getAllFilms();
 
     const cameraForm = createCameraForm(allTypes, allClassifications, allManufacturers, allFilms);
     cameraForm.handle(req, {
@@ -187,11 +147,11 @@ router.post('/create', async (req, res) => {
 
 router.get('/:camera_id/update', async (req, res) => {
 
-    const camera = await getCameraById(req.params.camera_id);
-    const allTypes = await getAllTypes();
-    const allClassifications = await getAllClassifications();
-    const allManufacturers = await getAllManufacturers();
-    const allFilms = await getAllFilms();
+    const camera = await cameraDataLayer.getCameraById(req.params.camera_id);
+    const allTypes = await cameraDataLayer.getAllTypes();
+    const allClassifications = await cameraDataLayer.getAllClassifications();
+    const allManufacturers = await cameraDataLayer.getAllManufacturers();
+    const allFilms = await cameraDataLayer.getAllFilms();
 
     const cameraForm = createCameraForm(allTypes, allClassifications, allManufacturers, allFilms);
 
@@ -230,11 +190,11 @@ router.get('/:camera_id/update', async (req, res) => {
 
 router.post('/:camera_id/update', async (req, res) => {
 
-    const camera = await getCameraById(req.params.camera_id);
-    const allTypes = await getAllTypes();
-    const allClassifications = await getAllClassifications();
-    const allManufacturers = await getAllManufacturers();
-    const allFilms = await getAllFilms();
+    const camera = await cameraDataLayer.getCameraById(req.params.camera_id);
+    const allTypes = await cameraDataLayer.getAllTypes();
+    const allClassifications = await cameraDataLayer.getAllClassifications();
+    const allManufacturers = await cameraDataLayer.getAllManufacturers();
+    const allFilms = await cameraDataLayer.getAllFilms();
 
     const cameraForm = createCameraForm(allTypes, allClassifications, allManufacturers, allFilms);
     cameraForm.handle(req, {
@@ -276,7 +236,7 @@ router.post('/:camera_id/update', async (req, res) => {
 
 router.get('/:camera_id/delete', async (req, res) => {
 
-    const camera = await getCameraById(req.params.camera_id);
+    const camera = await cameraDataLayer.getCameraById(req.params.camera_id);
 
     res.render('cameras/delete', {
         camera: camera.toJSON()
@@ -284,7 +244,7 @@ router.get('/:camera_id/delete', async (req, res) => {
 });
 
 router.post('/:camera_id/delete', async (req, res) => {
-    const camera = await getCameraById(req.params.camera_id);
+    const camera = await cameraDataLayer.getCameraById(req.params.camera_id);
     await camera.destroy();
     req.flash("success_messages", `Selected camera has been successfully deleted`)
     res.redirect('/cameras')
