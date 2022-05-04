@@ -7,6 +7,7 @@ const router = express.Router();
 // FORMS
 const {
     createCameraForm,
+    searchForm,
     bootstrapField
 } = require('../forms')
 
@@ -16,8 +17,7 @@ const {
     Type,
     Classification,
     Manufacturer,
-    Film,
-    Image
+    Film
 } = require('../models')
 
 // REFACTORED CODE
@@ -58,32 +58,77 @@ async function getCameraById(cameraId) {
     });
     return camera;
 };
-
-async function getImageById(cameraId) {
-    const image = await Image.where({
-        camera_id: cameraId
-    }).fetch({
-        require: true,
-        withRelated: ['camera']
-    })
-    return image;
-}
-
-async function getAllImages() {
-    const image = await Image.fetchAll().map(image => {
-        return [image.get('id'), image.get('url')]
-    })
-    return image;
-}
-
 // REFACTORED CODE END
 
 router.get('/', async (req, res) => {
-    const cameras = await Camera.collection().fetch({
-        withRelated: ['type', 'manufacturer', 'film', 'classification']
-    });
-    res.render('cameras/index', {
-        'camera': cameras.toJSON()
+    // const cameras = await Camera.collection().fetch({
+    //     withRelated: ['type', 'manufacturer', 'film', 'classification']
+    // });
+    // res.render('cameras/index', {
+    //     'camera': cameras.toJSON()
+    // })
+
+    const allTypes = await getAllTypes();
+    allTypes.unshift(["", '----']);
+
+    const allManufacturers = await getAllManufacturers();
+    allManufacturers.unshift(["", '----']);
+
+    const allFilms = await getAllFilms();
+
+    let search = searchForm(allTypes, allManufacturers, allFilms)
+
+    let c = Camera.collection();
+
+    search.handle(req, {
+        'empty': async (form) => {
+            let cameras = await c.fetch({
+                withRelated: ['type', 'manufacturer', 'film']
+            })
+            res.render('cameras/index', {
+                camera: cameras.toJSON(),
+                form: form.toHTML(bootstrapField)
+            })
+        },
+        'error': async (form) => {
+            let cameras = await c.fetch({
+                withRelated: ['type', 'manufacturer', 'film']
+            })
+            res.render('cameras/index', {
+                camera: cameras.toJSON(),
+                form: form.toHTML(bootstrapField)
+            })
+        },
+        'success': async (form) => {
+            if (form.data.type_id && form.data.type_id != "0") {
+                c = c.where('type_id', '=', form.data.type_id)
+            }
+
+            if (form.data.manufacturer_id && form.data.manufacturer_id != "0") {
+                c = c.where('manufacturer_id', '=', form.data.manufacturer_id)
+            }
+
+            if (form.data.films) {
+                c = c.query('join', 'cameras_films', 'cameras.id', 'camera_id')
+                    .where('film_id', 'in', form.data.films.split(','))
+            }
+
+            if (form.data.min_stock) {
+                c = c.where('stock', '>=', req.query.min_stock)
+            }
+
+            if (form.data.max_stock) {
+                c = c.where('stock', '<=', req.query.max_stock);
+            }
+
+            let cameras = await c.fetch({
+                withRelated: ['type', 'manufacturer', 'film']
+            })
+            res.render('cameras/index', {
+                camera: cameras.toJSON(),
+                form: form.toHTML(bootstrapField)
+            })
+        }
     })
 });
 
