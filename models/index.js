@@ -14,9 +14,6 @@ const Camera = bookshelf.model('Camera', {
     film: function () {
         return this.belongsToMany('Film')
     },
-    image: function () {
-        return this.hasMany('Image')
-    }
 });
 
 const Type = bookshelf.model('Type', {
@@ -47,15 +44,15 @@ const Film = bookshelf.model('Film', {
     }
 })
 
-const Image = bookshelf.model('Image', {
-    tableName: 'images',
+const User = bookshelf.model('User', {
+    tableName: 'users'
+})
+
+const Cart = bookshelf.model('Cart', {
+    tableName: 'cart_items',
     camera: function () {
         return this.belongsTo('Camera')
     }
-})
-
-const User = bookshelf.model('User', {
-    tableName: 'users'
 })
 
 module.exports = {
@@ -64,6 +61,6 @@ module.exports = {
     Classification,
     Manufacturer,
     Film,
-    Image,
-    User
+    User,
+    Cart
 };
