@@ -15,16 +15,14 @@ exports.setup = function (options, seedLink) {
 };
 
 exports.up = function (db) {
-  return db.addForeignKey('images', 'cameras', 'image_camera_fk', {
-    camera_id: 'id'
-  }, {
-    onDelete: 'cascade',
-    onUpdate: 'restrict'
-  });
+  return db.addColumn('cameras', 'image_url', {
+    type: 'string',
+    length: '255'
+  })
 };
 
 exports.down = function (db) {
-  return null;
+  return db.dropColumn('image_url')
 };
 
 exports._meta = {

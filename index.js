@@ -85,6 +85,7 @@ app.use((req, res, next) => {
 // All routes
 const cameraRoutes = require('./routes/cameras')
 const memberRoutes = require('./routes/members')
+const cloudinaryRoutes = require('./routes/cloudinary')
 
 const {
     checkIfAuthenticated
@@ -94,6 +95,7 @@ const {
 async function main() {
     app.use('/cameras', checkIfAuthenticated, cameraRoutes)
     app.use('/members', memberRoutes)
+    app.use('/cloudinary', cloudinaryRoutes)
 }
 
 main();

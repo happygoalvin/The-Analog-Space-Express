@@ -130,6 +130,9 @@ const createCameraForm = (types, classifications, manufacturers, films) => {
             errorAfterField: true,
             widget: widgets.multipleSelect(),
             choices: films
+        }),
+        image_url: fields.array({
+            widget: widgets.hidden()
         })
     })
 }
@@ -180,9 +183,51 @@ const loginForm = () => {
     })
 }
 
+const searchForm = (types, manufacturers, films) => {
+    return forms.create({
+        type_id: fields.string({
+            label: "Type",
+            required: false,
+            errorAfterField: true,
+            widget: widgets.select({
+                classes: ['form-select']
+            }),
+            choices: types
+        }),
+        manufacturer_id: fields.string({
+            label: "Manufacturer",
+            required: false,
+            errorAfterField: true,
+            widget: widgets.select({
+                classes: ['form-select']
+            }),
+            choices: manufacturers
+        }),
+        films: fields.string({
+            required: false,
+            errorAfterField: true,
+            widget: widgets.multipleSelect(),
+            choices: films
+        }),
+        min_stock: fields.number({
+            required: false,
+            errorAfterField: true,
+            widget: widgets.number(),
+            validators: [validators.integer(), validators.min(0)]
+        }),
+        max_stock: fields.number({
+            required: false,
+            errorAfterField: true,
+            widget: widgets.number(),
+            validators: [validators.integer()]
+        })
+    })
+}
+
 module.exports = {
     createCameraForm,
     registrationForm,
     loginForm,
+    searchForm,
     bootstrapField
 }

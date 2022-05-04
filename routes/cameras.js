@@ -1,4 +1,7 @@
 const express = require('express');
+const {
+    trigger
+} = require('../bookshelf');
 const router = express.Router();
 
 // FORMS
@@ -55,6 +58,24 @@ async function getCameraById(cameraId) {
     });
     return camera;
 };
+
+async function getImageById(cameraId) {
+    const image = await Image.where({
+        camera_id: cameraId
+    }).fetch({
+        require: true,
+        withRelated: ['camera']
+    })
+    return image;
+}
+
+async function getAllImages() {
+    const image = await Image.fetchAll().map(image => {
+        return [image.get('id'), image.get('url')]
+    })
+    return image;
+}
+
 // REFACTORED CODE END
 
 router.get('/', async (req, res) => {
@@ -75,7 +96,10 @@ router.get('/create', async (req, res) => {
 
     const cameraForm = createCameraForm(allTypes, allClassifications, allManufacturers, allFilms)
     res.render('cameras/create', {
-        form: cameraForm.toHTML(bootstrapField)
+        form: cameraForm.toHTML(bootstrapField),
+        cloudinaryName: process.env.CLOUDINARY_NAME,
+        cloudinaryApiKey: process.env.CLOUDINARY_API_KEY,
+        cloudinaryPreset: process.env.CLOUDINARY_UPLOAD_PRESET
     })
 });
 
@@ -142,6 +166,7 @@ router.get('/:camera_id/update', async (req, res) => {
     cameraForm.fields.body_color.value = camera.get('body_color');
     cameraForm.fields.format.value = camera.get('format');
     cameraForm.fields.weight.value = camera.get('weight');
+    cameraForm.fields.image_url.value = camera.get('image_url');
 
     let selectedClassifications = await camera.related('classification').pluck('id');
     cameraForm.fields.classifications.value = selectedClassifications;
@@ -151,7 +176,10 @@ router.get('/:camera_id/update', async (req, res) => {
 
     res.render('cameras/update', {
         form: cameraForm.toHTML(bootstrapField),
-        camera: camera.toJSON()
+        camera: camera.toJSON(),
+        cloudinaryName: process.env.CLOUDINARY_NAME,
+        cloudinaryApiKey: process.env.CLOUDINARY_API_KEY,
+        cloudinaryPreset: process.env.CLOUDINARY_UPLOAD_PRESET
     })
 });
 
@@ -216,4 +244,7 @@ router.post('/:camera_id/delete', async (req, res) => {
     req.flash("success_messages", `Selected camera has been successfully deleted`)
     res.redirect('/cameras')
 })
+
+
+
 module.exports = router;
