@@ -14,7 +14,7 @@ const getCart = async (userId) => {
 
 const getUser = async (userId) => {
     return await User.collection().where({
-        user_id: userId
+        id: userId
     }).fetch({
         require: false
     })

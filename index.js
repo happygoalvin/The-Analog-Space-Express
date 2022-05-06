@@ -58,10 +58,12 @@ app.use(cors());
 // enable CSRF
 const csurfInstance = csrf();
 app.use(function (req, res, next) {
-    if (req.url === "/checkout/process_payment") {
+    if (req.url === "/checkout/process_payment" ||
+        req.url.slice(0, 5) == '/api/') {
         return next();
+    } else {
+        csurfInstance(req, res, next);
     }
-    csurfInstance(req, res, next);
 })
 
 // Handle CSRF errors
@@ -109,8 +111,8 @@ async function main() {
     app.use('/cameras', checkIfAuthenticated, cameraRoutes)
     app.use('/members', memberRoutes)
     app.use('/cloudinary', cloudinaryRoutes)
-    app.use('/cart', express.json(), api.carts)
-    app.use('/checkout', express.json(), api.checkout)
+    app.use('/api/cart', express.json(), api.carts)
+    app.use('/api/checkout', express.json(), api.checkout)
 }
 
 main();

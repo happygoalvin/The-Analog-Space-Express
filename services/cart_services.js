@@ -15,7 +15,7 @@ class CartServices {
 
     async addToCart(cameraId, quantity) {
         let cartItem = await cartDataLayer.getCartItemByUserAndProduct(
-            this.user_id, productId
+            this.user_id, cameraId
         )
         if (cartItem) {
             return await cartDataLayer.updateQuantity(

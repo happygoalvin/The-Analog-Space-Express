@@ -45,13 +45,23 @@ const Film = bookshelf.model('Film', {
 })
 
 const User = bookshelf.model('User', {
-    tableName: 'users'
+    tableName: 'users',
+    order: function () {
+        return this.hasMany('User')
+    }
 })
 
 const Cart = bookshelf.model('Cart', {
     tableName: 'cart_items',
     camera: function () {
         return this.belongsTo('Camera')
+    }
+})
+
+const Order = bookshelf.model('Order', {
+    tableName: 'orders',
+    user: function () {
+        return this.belongsTo('User')
     }
 })
 
@@ -62,5 +72,6 @@ module.exports = {
     Manufacturer,
     Film,
     User,
-    Cart
+    Cart,
+    Order
 };

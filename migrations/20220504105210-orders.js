@@ -15,24 +15,28 @@ exports.setup = function (options, seedLink) {
 };
 
 exports.up = function (db) {
-  return db.createTable('cart_items', {
+  return db.createTable('orders', {
     id: {
       type: 'int',
-      unsigned: true,
       primaryKey: true,
+      unsigned: true,
       autoIncrement: true,
       notNull: true
     },
-    quantity: {
-      type: 'int',
-      unsigned: true
+    created_datetime: {
+      type: 'datetime',
+      notNull: false
+    },
+    completed_datetime: {
+      type: 'datetime',
+      notNull: false
     },
     user_id: {
       type: 'int',
       unsigned: true,
       notNull: true,
       foreignKey: {
-        name: 'cart_items_user_fk',
+        name: 'orders_user_fk',
         table: 'users',
         mapping: 'id',
         rules: {
@@ -40,26 +44,12 @@ exports.up = function (db) {
           onUpdate: 'CASCADE'
         }
       }
-    },
-    camera_id: {
-      type: 'int',
-      unsigned: true,
-      notNull: true,
-      foreignKey: {
-        name: 'cart_items_camera_fk',
-        table: 'cameras',
-        mapping: 'id',
-        rules: {
-          onDelete: 'CASCADE',
-          onUpdate: 'RESTRICT'
-        }
-      }
     }
-  })
+  });
 };
 
 exports.down = function (db) {
-  return db.dropTable('cart_items');
+  return db.dropTable('orders')
 };
 
 exports._meta = {

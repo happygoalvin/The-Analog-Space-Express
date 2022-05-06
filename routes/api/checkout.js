@@ -5,8 +5,8 @@ const bodyParser = require('body-parser');
 const CartServices = require('../../services/cart_services');
 const Stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
-router.get('/', async (req, res) => {
-    const cart = new CartServices(req.query.userId);
+router.get('/:user_id/', async (req, res) => {
+    const cart = new CartServices(req.params.user_id);
 
     // get all the items from the cart
     let cartItems = await cart.getCart();
@@ -38,7 +38,6 @@ router.get('/', async (req, res) => {
         customer_email: userDetails.get('email'),
         success_url: process.env.STRIPE_SUCCESS_URL + '?sessionId={CHECKOUT_SESSION_ID}',
         cancel_url: process.env.STRIPE_ERROR_URL,
-        currency: 'sgd',
         metadata: {
             orders: metaData
         }
@@ -60,7 +59,7 @@ router.post('/process_payment', bodyParser.raw({
         let sigHeader = req.headers["stripe-signature"];
         let event;
         try {
-            event = Stripe.webhhooks.constructEvent(payload, sigHeader, endpointSecret);
+            event = Stripe.webhooks.constructEvent(payload, sigHeader, endpointSecret);
         } catch (e) {
             res.send({
                 error: e.message
