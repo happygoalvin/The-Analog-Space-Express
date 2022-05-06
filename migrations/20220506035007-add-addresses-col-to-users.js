@@ -15,16 +15,15 @@ exports.setup = function (options, seedLink) {
 };
 
 exports.up = function (db) {
-  return db.addColumn('cameras', 'manufacturer_id', {
+  return db.addColumn('users', 'address_id', {
     type: 'int',
     unsigned: true,
     notNull: true
-  })
+  });
 };
 
-exports.down = async function (db) {
-  await db.removeForeignKey('manufacturer_id');
-  db.dropColumn('manufacturer_id')
+exports.down = function (db) {
+  return db.dropColumn('address_id');
 };
 
 exports._meta = {
