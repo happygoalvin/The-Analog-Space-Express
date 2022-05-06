@@ -14,6 +14,15 @@ const Camera = bookshelf.model('Camera', {
     film: function () {
         return this.belongsToMany('Film')
     },
+    cart: function () {
+        return this.belongsToMany('Cart')
+    },
+    order: function () {
+        return this.belongsToMany('Order')
+    },
+    review: function () {
+        return this.hasMany('Review')
+    }
 });
 
 const Type = bookshelf.model('Type', {
@@ -47,19 +56,51 @@ const Film = bookshelf.model('Film', {
 const User = bookshelf.model('User', {
     tableName: 'users',
     order: function () {
-        return this.hasMany('User')
+        return this.hasMany('Order')
+    },
+    address: function () {
+        return this.belongsTo('Address')
+    },
+    cart: function () {
+        return this.belongsToMany('Cart')
+    },
+    review: function () {
+        return this.hasMany('Review')
     }
 })
 
 const Cart = bookshelf.model('Cart', {
     tableName: 'cart_items',
     camera: function () {
-        return this.belongsTo('Camera')
+        return this.belongsToMany('Camera')
+    },
+    user: function () {
+        return this.belongsToMany('User')
     }
 })
 
 const Order = bookshelf.model('Order', {
     tableName: 'orders',
+    user: function () {
+        return this.belongsTo('User')
+    },
+    camera: function () {
+        return this.belongsToMany('Camera')
+    }
+})
+
+const Address = bookshelf.model('Address', {
+    tableName: 'addresses',
+    user: function () {
+        return this.hasMany('User')
+    }
+})
+
+const Review = bookshelf.model('Review', {
+    tableName: 'reviews',
+    camera: function () {
+        return this.belongsTo('Camera')
+    },
     user: function () {
         return this.belongsTo('User')
     }
@@ -73,5 +114,7 @@ module.exports = {
     Film,
     User,
     Cart,
-    Order
+    Order,
+    Address,
+    Review
 };
