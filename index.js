@@ -99,7 +99,8 @@ const cloudinaryRoutes = require('./routes/cloudinary')
 
 const api = {
     carts: require('./routes/api/carts'),
-    checkout: require('./routes/api/checkout')
+    checkout: require('./routes/api/checkout'),
+    camera: require('./routes/api/cameras')
 }
 
 const {
@@ -108,11 +109,12 @@ const {
 
 
 async function main() {
-    app.use('/cameras', checkIfAuthenticated, cameraRoutes)
-    app.use('/members', memberRoutes)
-    app.use('/cloudinary', cloudinaryRoutes)
-    app.use('/api/cart', express.json(), api.carts)
-    app.use('/api/checkout', express.json(), api.checkout)
+    app.use('/cameras', checkIfAuthenticated, cameraRoutes);
+    app.use('/members', memberRoutes);
+    app.use('/cloudinary', cloudinaryRoutes);
+    app.use('/api/cart', express.json(), api.carts);
+    app.use('/api/checkout', express.json(), api.checkout);
+    app.use('/api/cameras', express.json(), api.camera);
 }
 
 main();

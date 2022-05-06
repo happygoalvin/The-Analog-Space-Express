@@ -18,7 +18,7 @@ exports.up = function (db) {
   return db.addColumn('users', 'address_id', {
     type: 'int',
     unsigned: true,
-    notNull: true
+    notNull: false
   });
 };
 

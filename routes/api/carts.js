@@ -3,24 +3,52 @@ const router = express.Router();
 
 const CartServices = require('../../services/cart_services');
 
-router.get('/', async (req, res) => {
-    let cart = new CartServices(req.session.user.id);
-    res.send((await cart.getCart()).toJSON())
+router.get('/:user_id', async (req, res) => {
+    let cart = new CartServices(req.params.user_id);
+    try {
+        const cartItems = await cart.getCart()
+        res.status(200)
+        res.send(cartItems.toJSON())
+    } catch (e) {
+        res.status(500)
+        res.send("Unable to retrieve Cart Items")
+    }
 })
 
-router.get('/:camera_id/add', async (req, res) => {
-    let cart = new CartServices(req.session.user.id);
-    res.send(await cart.addToCart(req.params.camera_id, 1));
+router.get('/:user_id/:camera_id/add', async (req, res) => {
+    let cart = new CartServices(req.params.user_id);
+    try {
+        await cart.addToCart(req.params.camera_id, 1)
+        res.status(200)
+        res.send("Item has been added to cart successfully");
+    } catch (e) {
+        res.status(204)
+        res.send("Item not found")
+    }
 })
 
-router.get('/:camera_id/remove', async (req, res) => {
-    let cart = new CartServices(req.session.user.id);
-    res.send(await cart.removeFromCart(req.params.camera_id));
+router.get('/:user_id/:camera_id/remove', async (req, res) => {
+    let cart = new CartServices(req.params.user_id);
+    try {
+        await cart.removeFromCart(req.params.camera_id)
+        res.status(200)
+        res.send("Item removed from cart successfully");
+    } catch (e) {
+        res.status(204)
+        res.send("Item not found")
+    }
 })
 
-router.post('/:camera_id/quantity/update', async (req, res) => {
-    let cart = new CartServices(req.session.user.id);
-    res.send(await cart.updateCartQuantity(req.params.camera_id, req.body.newQuantity));
+router.post('/:user_id/:camera_id/quantity/update', async (req, res) => {
+    let cart = new CartServices(req.params.user_id);
+    try {
+        await cart.updateCartQuantity(req.params.camera_id, req.body.newQuantity)
+        res.status(200)
+        res.send("Quantity updated");
+    } catch (e) {
+        res.status(204)
+        res.send("Item not found")
+    }
 })
 
 module.exports = router;

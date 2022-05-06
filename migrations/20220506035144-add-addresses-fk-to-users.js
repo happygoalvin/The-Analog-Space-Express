@@ -15,7 +15,7 @@ exports.setup = function (options, seedLink) {
 };
 
 exports.up = function (db) {
-  return db.addForeignKey('users', 'addresses', 'user_address_fk', {
+  return db.addForeignKey('users', 'addresses', 'users_address_fk', {
     address_id: 'id',
   }, {
     onDelete: 'CASCADE',
@@ -24,7 +24,7 @@ exports.up = function (db) {
 };
 
 exports.down = async function (db) {
-  return await db.removeForeignKey('address_id')
+  await db.removeForeignKey('users_address_fk')
 };
 
 exports._meta = {

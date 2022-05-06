@@ -44,10 +44,15 @@ async function getCameraById(cameraId) {
     return camera;
 };
 
+const getAllCameras = async () => {
+    return await Camera.fetchAll();
+}
+
 module.exports = {
     getAllTypes,
     getAllClassifications,
     getAllFilms,
     getAllManufacturers,
-    getCameraById
+    getCameraById,
+    getAllCameras
 }
