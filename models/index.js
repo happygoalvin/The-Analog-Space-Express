@@ -14,9 +14,6 @@ const Camera = bookshelf.model('Camera', {
     film: function () {
         return this.belongsToMany('Film')
     },
-    cart: function () {
-        return this.belongsToMany('Cart')
-    },
     order: function () {
         return this.belongsToMany('Order')
     },
@@ -61,9 +58,6 @@ const User = bookshelf.model('User', {
     address: function () {
         return this.belongsTo('Address')
     },
-    cart: function () {
-        return this.belongsToMany('Cart')
-    },
     review: function () {
         return this.hasMany('Review')
     }
@@ -72,10 +66,10 @@ const User = bookshelf.model('User', {
 const Cart = bookshelf.model('Cart', {
     tableName: 'cart_items',
     camera: function () {
-        return this.belongsToMany('Camera')
+        return this.belongsTo('Camera')
     },
     user: function () {
-        return this.belongsToMany('User')
+        return this.belongsTo('User')
     }
 })
 
