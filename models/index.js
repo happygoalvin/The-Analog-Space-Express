@@ -86,6 +86,9 @@ const Order = bookshelf.model('Order', {
     },
     camera: function () {
         return this.belongsToMany('Camera')
+    },
+    orderStatus: function () {
+        return this.belongsTo('OrderStatus')
     }
 })
 
@@ -106,6 +109,13 @@ const Review = bookshelf.model('Review', {
     }
 })
 
+const OrderStatus = bookshelf.model('OrderStatus', {
+    tableName: 'order_statuses',
+    order: function () {
+        return this.hasMany('Order')
+    }
+})
+
 module.exports = {
     Camera,
     Type,
@@ -116,5 +126,6 @@ module.exports = {
     Cart,
     Order,
     Address,
-    Review
+    Review,
+    OrderStatus
 };
