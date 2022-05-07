@@ -50,6 +50,14 @@ router.get('/:user_id/', async (req, res) => {
     })
 })
 
+router.get('/success', (req, res) => {
+    res.send("Stripe checkout success")
+})
+
+router.get('/error', (req, res) => {
+    res.send("Error with checkout, please try again")
+})
+
 router.post('/process_payment', bodyParser.raw({
         type: 'application/json'
     }),
