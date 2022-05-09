@@ -89,38 +89,32 @@ router.post("/process_payment", express.raw({
         console.log(event)
         if (event.type == "checkout.session.completed") {
             let stripeSession = event.data.object;
-
             let orderDetails = JSON.parse(event.data.object.metadata.orders)
 
-            const user = await User.where({
-                id: stripeSession.client_reference_id
-            }).fetch({
-                require: false
-            })
-        }
+            const order = new Order;
+            order.set('status_id', 2); // set order status to processing
+            order.set('user_id', stripeSession.client_reference_id);
+            order.set('order_date', new Date());
+            order.set('payment_status', stripeSession.payment_status);
+            order.set('total_paid', stripeSession.amount_total);
+            order.set('stripe_payment_id', stripeSession.id);
 
-        const order = new Order;
-        order.set('status_id', 2); // set order status to processing
-        order.set('user_id', stripeSession.client_reference_id);
-        order.set('order_date', new Date());
-        order.set('payment_status', stripeSession.payment_status);
-        order.set('total_paid', stripeSession.amount_total);
-        order.set('stripe_payment_id', stripeSession.id);
+            await order.save();
 
-        await order.save();
+            for (let product of orderDetails) {
+                const purchase = new Purchase();
+                purchase.set('order_id', order.get('id'));
+                purchase.set('camera_id', product.camera_id);
+                purchase.set('quantity', product.quantity);
+                purchase.set('total_cost', stripeSession.amount_total);
+                purchase.save()
+            }
 
-        for (let product of orderDetails) {
-            const purchase = new Purchase();
-            purchase.set('order_id', order.get('id'));
-            purchase.set('camera_id', product.camera_id);
-            purchase.set('quantity', product.quantity);
-            purchase.set('total_cost', stripeSession.amount_total);
-            purchase.save()
-        }
+            const cartServices = new CartServices(stripeSession.client_reference_id);
+            for (let product of orderDetails) {
+                await cartServices.removeFromCart(product.camera_id);
+            }
 
-        const cartServices = new cartServices(stripeSession.client_reference_id);
-        for (let product of orderDetails) {
-            await cartServices.removeFromCart(product.camera_id);
         }
 
         res.send({

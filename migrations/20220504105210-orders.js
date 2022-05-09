@@ -67,7 +67,7 @@ exports.up = function (db) {
     },
     stripe_payment_id: {
       type: 'string',
-      length: '50',
+      length: '150',
       notNull: false
     }
   });
