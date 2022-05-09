@@ -45,6 +45,7 @@ router.get('/', async (req, res) => {
             let cameras = await c.fetch({
                 withRelated: ['type', 'manufacturer', 'film']
             })
+
             res.render('cameras/index', {
                 camera: cameras.toJSON(),
                 form: form.toHTML(bootstrapField)

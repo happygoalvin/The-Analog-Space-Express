@@ -224,10 +224,52 @@ const searchForm = (types, manufacturers, films) => {
     })
 }
 
+const searchOrdersForm = (orderStatus) => {
+    return forms.create({
+        status_id: fields.string({
+            label: "Order Status",
+            required: false,
+            errorAfterField: true,
+            widget: widgets.select({
+                classes: ["form-select"]
+            }),
+            choices: orderStatus
+        }),
+        min_paid: fields.number({
+            required: false,
+            errorAfterField: true,
+            widget: widgets.number(),
+            validators: [validators.integer()]
+        }),
+        max_paid: fields.number({
+            required: false,
+            errorAfterField: true,
+            widget: widgets.number(),
+            validators: [validators.integer()]
+        })
+    })
+}
+
+const updateStatusForm = (orderStatus) => {
+    return forms.create({
+        status_id: fields.string({
+            label: "Order Status",
+            required: false,
+            errorAfterField: true,
+            widget: widgets.select({
+                classes: ["form-select"]
+            }),
+            choices: orderStatus
+        })
+    })
+}
+
 module.exports = {
     createCameraForm,
     registrationForm,
     loginForm,
     searchForm,
+    searchOrdersForm,
+    updateStatusForm,
     bootstrapField
 }

@@ -96,6 +96,7 @@ app.use((req, res, next) => {
 const cameraRoutes = require('./routes/cameras')
 const memberRoutes = require('./routes/members')
 const cloudinaryRoutes = require('./routes/cloudinary')
+const orderRoutes = require('./routes/orders')
 
 const api = {
     carts: require('./routes/api/carts'),
@@ -110,6 +111,7 @@ const {
 
 async function main() {
     app.use('/cameras', checkIfAuthenticated, cameraRoutes);
+    app.use('/orders', checkIfAuthenticated, orderRoutes);
     app.use('/members', memberRoutes);
     app.use('/cloudinary', cloudinaryRoutes);
     app.use('/api/cart', express.json(), api.carts);

@@ -19,6 +19,9 @@ const Camera = bookshelf.model('Camera', {
     },
     review: function () {
         return this.hasMany('Review')
+    },
+    purchase: function () {
+        return this.hasMany('Purchase')
     }
 });
 
@@ -78,15 +81,15 @@ const Order = bookshelf.model('Order', {
     user: function () {
         return this.belongsTo('User')
     },
-    camera: function () {
-        return this.belongsToMany('Camera')
-    },
     orderStatus: function () {
-        return this.belongsTo('OrderStatus')
+        return this.belongsTo('OrderStatus', 'status_id')
     },
     purchase: function () {
         return this.hasMany('Purchase')
-    }
+    },
+    camera: function () {
+        return this.belongsToMany('Camera')
+    },
 })
 
 const Address = bookshelf.model('Address', {
@@ -109,7 +112,7 @@ const Review = bookshelf.model('Review', {
 const OrderStatus = bookshelf.model('OrderStatus', {
     tableName: 'order_statuses',
     order: function () {
-        return this.hasMany('Order')
+        return this.hasMany('Order', 'status_id')
     }
 })
 
