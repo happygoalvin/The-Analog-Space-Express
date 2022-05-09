@@ -23,11 +23,7 @@ exports.up = function (db) {
       autoIncrement: true,
       notNull: true
     },
-    created_datetime: {
-      type: 'datetime',
-      notNull: false
-    },
-    completed_datetime: {
+    order_date: {
       type: 'datetime',
       notNull: false
     },
@@ -44,6 +40,35 @@ exports.up = function (db) {
           onUpdate: 'CASCADE'
         }
       }
+    },
+    status_id: {
+      type: 'int',
+      unsigned: true,
+      notNull: true,
+      foreignKey: {
+        name: 'orders_order_status_fk',
+        table: 'order_statuses',
+        mapping: 'id',
+        rules: {
+          onDelete: 'CASCADE',
+          onUpdate: 'RESTRICT'
+        }
+      }
+    },
+    payment_status: {
+      type: 'string',
+      length: '30',
+      notNull: false
+    },
+    total_paid: {
+      type: 'string',
+      length: '30',
+      notNull: false
+    },
+    stripe_payment_id: {
+      type: 'string',
+      length: '50',
+      notNull: false
     }
   });
 };

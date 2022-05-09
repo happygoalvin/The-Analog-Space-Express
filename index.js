@@ -113,7 +113,7 @@ async function main() {
     app.use('/members', memberRoutes);
     app.use('/cloudinary', cloudinaryRoutes);
     app.use('/api/cart', express.json(), api.carts);
-    app.use('/api/checkout', express.json(), api.checkout);
+    app.use('/api/checkout', api.checkout);
     app.use('/api/cameras', express.json(), api.camera);
 }
 

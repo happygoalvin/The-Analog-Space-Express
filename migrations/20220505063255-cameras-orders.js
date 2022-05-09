@@ -50,6 +50,16 @@ exports.up = function (db) {
           onUpdate: 'RESTRICT'
         }
       }
+    },
+    quantity: {
+      type: 'int',
+      unsigned: true,
+      notNull: false
+    },
+    total_cost: {
+      type: 'int',
+      unsigned: true,
+      notNull: false
     }
   })
 };

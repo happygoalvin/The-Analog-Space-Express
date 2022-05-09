@@ -13,7 +13,7 @@ const getCart = async (userId) => {
 }
 
 const getUser = async (userId) => {
-    return await User.collection().where({
+    return await User.where({
         id: userId
     }).fetch({
         require: false
