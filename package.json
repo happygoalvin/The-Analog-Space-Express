@@ -23,6 +23,11 @@
   "name": "The-Analog-Space-Express",
   "version": "1.0.0",
   "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "description": "",
   "repository": "https://github.com/happygoalvin/The-Analog-Space-Express.git",
   "author": "happygoalvin <alvin.yo@trentglobal.edu.sg>",
   "license": "MIT"
