@@ -126,6 +126,10 @@ const Purchase = bookshelf.model('Purchase', {
     }
 })
 
+const BlacklistedToken = bookshelf.model('BlacklistedToken', {
+    tableName: 'blacklisted_tokens',
+})
+
 module.exports = {
     Camera,
     Type,
@@ -138,5 +142,6 @@ module.exports = {
     Address,
     Review,
     OrderStatus,
-    Purchase
+    Purchase,
+    BlacklistedToken
 };
