@@ -131,7 +131,7 @@ const createCameraForm = (types, classifications, manufacturers, films) => {
             widget: widgets.multipleSelect(),
             choices: films
         }),
-        image_url: fields.array({
+        image_url: fields.string({
             widget: widgets.hidden()
         })
     })
