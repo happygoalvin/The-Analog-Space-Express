@@ -78,7 +78,7 @@ const createCameraForm = (types, classifications, manufacturers, films) => {
             widget: widgets.number(),
             validators: [validators.integer(), validators.min(0)]
         }),
-        camera_ISO: fields.string({
+        camera_iso: fields.string({
             required: false,
             errorAfterField: true,
         }),

@@ -90,8 +90,6 @@ app.use((req, res, next) => {
     next();
 })
 
-
-
 // All routes
 const landingRoutes = require('./routes/landing')
 const cameraRoutes = require('./routes/cameras')
