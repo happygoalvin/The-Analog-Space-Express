@@ -89,7 +89,7 @@ const createCameraForm = (types, classifications, manufacturers, films) => {
         aperture: fields.string({
             required: false,
             errorAfterField: true,
-            validators: [validators.alphanumeric()]
+            validators: [validators.regexp()]
         }),
         focal_length: fields.string({
             required: false,
