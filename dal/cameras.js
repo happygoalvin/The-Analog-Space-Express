@@ -48,11 +48,16 @@ const getAllCameras = async () => {
     return await Camera.fetchAll();
 }
 
+const getLandingCameras = async () => {
+    return await Camera.orderBy('created_date', "DESC").fetchAll().limit(10);
+}
+
 module.exports = {
     getAllTypes,
     getAllClassifications,
     getAllFilms,
     getAllManufacturers,
     getCameraById,
-    getAllCameras
+    getAllCameras,
+    getLandingCameras
 }
