@@ -13,7 +13,8 @@ const generateAccessToken = (user, secret, expiresIn) => {
     return jwt.sign({
         'first_name': user.first_name,
         'id': user.id,
-        'email': user.email
+        'email': user.email,
+        'role': user.role
     }, secret, {
         expiresIn: expiresIn
     });
@@ -43,7 +44,8 @@ router.post('/login', async (req, res) => {
         const userObject = {
             "first_name": user.get("first_name"),
             'email': user.get("email"),
-            'id': user.get("id")
+            'id': user.get("id"),
+            'role': user.get('role')
         }
 
         let accessToken = generateAccessToken(userObject, process.env.TOKEN_SECRET, '15m');
@@ -63,9 +65,25 @@ router.post('/login', async (req, res) => {
 })
 
 router.get('/profile', checkIfAuthenticatedJWT, async (req, res) => {
-    const user = req.user;
-    res.send(user);
+    const user = req.user.role;
+    console.log(user)
+    const userId = req.user.id;
+    if (user == "Customer") {
+        const userDetails = await User.where({
+            id: userId
+        }).fetch({
+            require: false
+        })
+        res.send(userDetails)
+    } else {
+        res.status(401)
+        res.send({
+            "Error": "Unauthorized Access"
+        })
+    }
 })
+
+
 
 router.post('/refresh', async (req, res) => {
     let refreshToken = req.body.refreshToken;

@@ -7,7 +7,7 @@ router.get('/', async (req, res) => {
     res.send(await cameraDAL.getLandingCameras());
 })
 
-router.get('/cameras', async (req, res) => {
+router.get('/products', async (req, res) => {
     res.send(await cameraDAL.getAllCameras())
 })
 
