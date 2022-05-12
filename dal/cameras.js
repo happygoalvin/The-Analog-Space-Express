@@ -49,7 +49,9 @@ const getAllCameras = async () => {
 }
 
 const getLandingCameras = async () => {
-    return await Camera.orderBy('created_date', "DESC").fetchAll().limit(10);
+    return await Camera.query(eachc => {
+        return eachc.limit(10), eachc.orderBy('created_date', 'desc')
+    }).fetchAll();
 }
 
 module.exports = {
