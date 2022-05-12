@@ -65,10 +65,9 @@ router.post('/login', async (req, res) => {
 })
 
 router.get('/profile', checkIfAuthenticatedJWT, async (req, res) => {
-    const user = req.user.role;
-    console.log(user)
+    const customer = req.user.role;
     const userId = req.user.id;
-    if (user == "Customer") {
+    if (customer == "Customer") {
         const userDetails = await User.where({
             id: userId
         }).fetch({
@@ -169,6 +168,7 @@ router.post('/register', async (req, res) => {
             user.set("email", req.body.email);
             user.set("password", getHashedPassword(req.body.password));
             user.set("role", "Customer");
+            user.set('contact_number', req.body.contact_number);
             await user.save();
 
             res.send(user)
