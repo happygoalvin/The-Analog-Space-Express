@@ -50,7 +50,7 @@ const getAllCameras = async () => {
 
 const getLandingCameras = async () => {
     return await Camera.query(eachc => {
-        return eachc.limit(10), eachc.orderBy('created_date', 'desc'), eachc.join('cameras_classifications', 'cameras.id', '=', 'camera_id').select("*")
+        return eachc.limit(10), eachc.orderBy('created_date', 'desc')
     }).fetchAll()
 }
 
