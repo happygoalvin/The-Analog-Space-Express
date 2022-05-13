@@ -26,6 +26,7 @@
             <th>Stock</th>
             <th>Cost(cents)</th>
             <th>Image</th>
+            <th>Classifications</th>
         </tr>
     </thead>
     <tbody>
@@ -48,6 +49,9 @@
             <td>{{this.stock}}</td>
             <td>{{this.cost}}</td>
             <td><img src="{{this.image_url}}" /></td>
+                {{#each this.classification}}
+                <td class="badge bg-primary mx-2">{{this.name}}</td>
+                {{/each}}
             <td>
                 <a class="btn btn-success btn-sm my-2" href="/cameras/{{this.id}}/update">Update</a>
                 <a class="btn btn-danger btn-sm" href="/cameras/{{this.id}}/delete">Delete</a>
