@@ -11,4 +11,8 @@ router.get('/products', async (req, res) => {
     res.send(await cameraDAL.getAllCameras())
 })
 
+router.get('/products/:camera_id', async (req, res) => {
+    res.send(await cameraDAL.getCameraById(req.params.camera_id));
+})
+
 module.exports = router;
