@@ -50,11 +50,9 @@ router.post('/login', async (req, res) => {
 
         let accessToken = generateAccessToken(userObject, process.env.TOKEN_SECRET, '15m');
         let refreshToken = generateAccessToken(userObject, process.env.REFRESH_TOKEN_SECRET, '7d');
-        let id = user.get("id");
         res.send({
             accessToken,
-            refreshToken,
-            id
+            refreshToken
         })
     } else {
         res.status(204)
@@ -85,7 +83,6 @@ router.get('/profile', checkIfAuthenticatedJWT, async (req, res) => {
 
 
 router.post('/refresh', async (req, res) => {
-    console.log(req.body);
     const refreshToken = req.body.refreshToken;
     if (!refreshToken) {
         res.sendStatus(401);
@@ -115,8 +112,7 @@ router.post('/refresh', async (req, res) => {
             }, process.env.TOKEN_SECRET, "15m")
             res.send({
                 accessToken,
-                refreshToken: req.body.refreshToken,
-                id: req.body.id
+                refreshToken: req.body.refreshToken
             })
         }
     })
