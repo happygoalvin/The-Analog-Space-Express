@@ -85,7 +85,7 @@ router.get('/profile', checkIfAuthenticatedJWT, async (req, res) => {
 
 
 router.post('/refresh', async (req, res) => {
-    console.log(req.body)
+    console.log(req.body);
     const refreshToken = req.body.refreshToken;
     if (!refreshToken) {
         res.sendStatus(401);
