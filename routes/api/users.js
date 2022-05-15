@@ -114,6 +114,7 @@ router.post('/refresh', async (req, res) => {
             res.send({
                 accessToken,
                 refreshToken: req.body.refreshToken,
+                id: req.body.id
             })
         }
     })
