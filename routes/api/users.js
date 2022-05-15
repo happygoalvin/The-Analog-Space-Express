@@ -85,7 +85,7 @@ router.get('/profile', checkIfAuthenticatedJWT, async (req, res) => {
 
 
 router.post('/refresh', async (req, res) => {
-    let refreshToken = req.body.refreshToken;
+    const refreshToken = req.body.refreshToken;
     if (!refreshToken) {
         res.sendStatus(401);
     }
@@ -109,6 +109,7 @@ router.post('/refresh', async (req, res) => {
             let accessToken = generateAccessToken({
                 "first_name": user.name,
                 "email": user.email,
+                'role': user.role,
                 "id": user.id
             }, process.env.TOKEN_SECRET, "15m")
             res.send({
@@ -116,6 +117,7 @@ router.post('/refresh', async (req, res) => {
             })
         }
     })
+    res.send(req.body.refreshToken, req.body.id)
 })
 
 router.post('/logout', async (req, res) => {

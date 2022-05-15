@@ -15,10 +15,10 @@ router.get('/:user_id', async (req, res) => {
     }
 })
 
-router.get('/:user_id/:camera_id/add', async (req, res) => {
-    let cart = new CartServices(req.params.user_id);
+router.post('/add/:user_id/:camera_id', async (req, res) => {
+    let cart = new CartServices(req.body);
     try {
-        await cart.addToCart(req.params.camera_id, 1)
+        await cart.addToCart(req.body, 1)
         res.status(200)
         res.send("Item has been added to cart successfully");
     } catch (e) {
@@ -27,7 +27,7 @@ router.get('/:user_id/:camera_id/add', async (req, res) => {
     }
 })
 
-router.get('/:user_id/:camera_id/remove', async (req, res) => {
+router.get('/remove/:user_id/:camera_id', async (req, res) => {
     let cart = new CartServices(req.params.user_id);
     try {
         await cart.removeFromCart(req.params.camera_id)
@@ -39,7 +39,7 @@ router.get('/:user_id/:camera_id/remove', async (req, res) => {
     }
 })
 
-router.post('/:user_id/:camera_id/quantity/update', async (req, res) => {
+router.post('/quantity/update/:user_id/:camera_id', async (req, res) => {
     let cart = new CartServices(req.params.user_id);
     try {
         await cart.updateCartQuantity(req.params.camera_id, req.body.newQuantity)
