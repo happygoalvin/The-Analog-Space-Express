@@ -152,6 +152,7 @@ router.post('/logout', async (req, res) => {
 })
 
 router.post('/register', async (req, res) => {
+    console.log(req.body)
     console.log("Checkpoint 1")
     let verifyEmail = await User.where({
         email: req.body.email
