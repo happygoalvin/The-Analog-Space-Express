@@ -152,10 +152,10 @@ router.post('/logout', async (req, res) => {
 })
 
 router.post('/register', async (req, res) => {
-    console.log(req.body)
+    console.log(req.body.registerData)
     console.log("Checkpoint 1")
     let verifyEmail = await User.where({
-        email: req.body.email
+        email: req.body.registerData.email
     }).fetch({
         require: false
     })
@@ -169,12 +169,12 @@ router.post('/register', async (req, res) => {
         try {
             console.log("checkpoint 4")
             const user = new User();
-            user.set("first_name", req.body.first_name);
-            user.set("last_name", req.body.last_name);
-            user.set("email", req.body.email);
-            user.set("password", getHashedPassword(req.body.password));
+            user.set("first_name", req.body.registerData.first_name);
+            user.set("last_name", req.body.registerData.last_name);
+            user.set("email", req.body.registerData.email);
+            user.set("password", getHashedPassword(req.body.registerData.password));
             user.set("role", "Customer");
-            user.set('contact_number', req.body.contact_number);
+            user.set('contact_number', req.body.registerData.contact_number);
             await user.save();
 
             res.send(user)
