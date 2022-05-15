@@ -154,7 +154,7 @@ router.post('/logout', async (req, res) => {
 router.post('/register', async (req, res) => {
     console.log(req.body)
     let verifyEmail = await User.where({
-        email: req.body.registerData.email
+        email: req.body.email
     }).fetch({
         require: false
     })
