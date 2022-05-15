@@ -152,16 +152,21 @@ router.post('/logout', async (req, res) => {
 })
 
 router.post('/register', async (req, res) => {
+    console.log("Checkpoint 1")
     let verifyEmail = await User.where({
         email: req.body.email
     }).fetch({
         require: false
     })
 
+    console.log("checkpoint 2")
+
     if (verifyEmail) {
+        console.log("checkpoint 3")
         res.send("Email already exists. Please try to login")
     } else {
         try {
+            console.log("checkpoint 4")
             const user = new User();
             user.set("first_name", req.body.first_name);
             user.set("last_name", req.body.last_name);
