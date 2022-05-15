@@ -152,29 +152,24 @@ router.post('/logout', async (req, res) => {
 })
 
 router.post('/register', async (req, res) => {
-    console.log(req.body.registerData)
-    console.log("Checkpoint 1")
+    console.log(req.body)
     let verifyEmail = await User.where({
         email: req.body.registerData.email
     }).fetch({
         require: false
     })
 
-    console.log("checkpoint 2")
-
     if (verifyEmail) {
-        console.log("checkpoint 3")
         res.send("Email already exists. Please try to login")
     } else {
         try {
-            console.log("checkpoint 4")
             const user = new User();
-            user.set("first_name", req.body.registerData.first_name);
-            user.set("last_name", req.body.registerData.last_name);
-            user.set("email", req.body.registerData.email);
-            user.set("password", getHashedPassword(req.body.registerData.password));
+            user.set("first_name", req.body.first_name);
+            user.set("last_name", req.body.last_name);
+            user.set("email", req.body.email);
+            user.set("password", getHashedPassword(req.body.password));
             user.set("role", "Customer");
-            user.set('contact_number', req.body.registerData.contact_number);
+            user.set('contact_number', req.body.contact_number);
             await user.save();
 
             res.send(user)
