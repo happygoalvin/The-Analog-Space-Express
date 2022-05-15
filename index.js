@@ -12,8 +12,6 @@ const FileStore = require('session-file-store')(session);
 // import csurf
 const csrf = require('csurf');
 
-
-
 // create an instance of express app
 let app = express();
 
@@ -36,6 +34,7 @@ app.use(
 
 // enable cors
 app.use(cors());
+app.options('*', cors());
 
 // setup sessions
 app.use(session({
