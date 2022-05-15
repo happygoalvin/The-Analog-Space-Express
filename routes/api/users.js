@@ -113,11 +113,12 @@ router.post('/refresh', async (req, res) => {
                 "id": user.id
             }, process.env.TOKEN_SECRET, "15m")
             res.send({
-                accessToken
+                accessToken,
+                refreshToken: req.body.refreshToken,
+                id: req.body.id
             })
         }
     })
-    res.send(req.body.refreshToken, req.body.id)
 })
 
 router.post('/logout', async (req, res) => {
