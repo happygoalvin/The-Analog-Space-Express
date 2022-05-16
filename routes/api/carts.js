@@ -18,10 +18,10 @@ router.get('/', checkIfAuthenticatedJWT, async (req, res) => {
     }
 })
 
-router.post('/add/:camera_id', checkIfAuthenticatedJWT, async (req, res) => {
-    let cart = new CartServices(req.user.id);
+router.post('/add', async (req, res) => {
+    let cart = new CartServices(req.body.id);
     try {
-        await cart.addToCart(req.params.camera_id, req.body.quantity)
+        await cart.addToCart(req.body.camera_id, req.body.quantity)
         res.status(200)
         res.send("Item has been added to cart successfully");
     } catch (e) {
@@ -30,10 +30,10 @@ router.post('/add/:camera_id', checkIfAuthenticatedJWT, async (req, res) => {
     }
 })
 
-router.delete('/remove/:camera_id', checkIfAuthenticatedJWT, async (req, res) => {
-    let cart = new CartServices(req.user.id);
+router.delete('/remove', async (req, res) => {
+    let cart = new CartServices(req.body.id);
     try {
-        await cart.removeFromCart(req.params.camera_id)
+        await cart.removeFromCart(req.body.camera_id)
         res.status(200)
         res.send("Item removed from cart successfully");
     } catch (e) {
@@ -42,10 +42,10 @@ router.delete('/remove/:camera_id', checkIfAuthenticatedJWT, async (req, res) =>
     }
 })
 
-router.put('/quantity/update/:camera_id', checkIfAuthenticatedJWT, async (req, res) => {
-    let cart = new CartServices(req.user.id);
+router.put('/quantity/update', async (req, res) => {
+    let cart = new CartServices(req.body.id);
     try {
-        await cart.updateCartQuantity(req.params.camera_id, req.body.quantity)
+        await cart.updateCartQuantity(req.body.camera_id, req.body.quantity)
         res.status(200)
         res.send("Quantity updated");
     } catch (e) {
