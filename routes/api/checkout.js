@@ -57,8 +57,10 @@ router.get('/', checkIfAuthenticatedJWT, async (req, res) => {
 
     let stripeSession = await Stripe.checkout.sessions.create(payment)
 
-    res.render('checkout/checkout', {
+    res.status(200)
+    res.send({
         sessionId: stripeSession.id,
+        stripeUrl: stripeSession.url,
         publishableKey: process.env.STRIPE_PUBLISHABLE_KEY
     })
 })
