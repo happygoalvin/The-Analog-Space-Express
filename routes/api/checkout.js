@@ -8,14 +8,17 @@ const {
     Order,
     Purchase,
 } = require('../../models');
+const {
+    checkIfAuthenticatedJWT
+} = require('../../middlewares');
 
-router.get('/:user_id', async (req, res) => {
-    const cart = new CartServices(req.params.user_id);
+router.get('/', checkIfAuthenticatedJWT, async (req, res) => {
+    const cart = new CartServices(req.user.id);
 
     // get all the items from the cart
     let cartItems = await cart.getCart();
     let user = await User.where({
-        id: req.params.user_id
+        id: req.user.id
     }).fetch()
 
     let lineItems = [];

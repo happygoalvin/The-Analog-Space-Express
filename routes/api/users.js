@@ -180,9 +180,9 @@ router.post('/register', async (req, res) => {
     }
 })
 
-router.get('/update/:user_id', async (req, res) => {
+router.get('/update', checkIfAuthenticatedJWT, async (req, res) => {
     try {
-        const user = await userDAL.getUserById(req.params.user_id)
+        const user = await userDAL.getUserById(req.user.id)
         res.send(user)
     } catch (e) {
         console.log(e)
@@ -190,8 +190,8 @@ router.get('/update/:user_id', async (req, res) => {
     }
 })
 
-router.post('/update/:user_id', async (req, res) => {
-    const user = await userDAL.getUserById(req.params.user_id)
+router.put('/update', checkIfAuthenticatedJWT, async (req, res) => {
+    const user = await userDAL.getUserById(req.user.id)
 
     if (req.body.password) {
         try {
@@ -204,13 +204,13 @@ router.post('/update/:user_id', async (req, res) => {
     }
 })
 
-router.get('/delete/:user_id', async (req, res) => {
-    const user = await userDAL.getUserById(req.params.user_id)
+router.get('/delete', checkIfAuthenticatedJWT, async (req, res) => {
+    const user = await userDAL.getUserById(req.user.id)
     res.send(user)
 })
 
-router.post('/delete/:user_id', async (req, res) => {
-    const user = await userDAL.getUserById(req.params.user_id)
+router.post('/delete', checkIfAuthenticatedJWT, async (req, res) => {
+    const user = await userDAL.getUserById(req.user.id)
     await user.destroy();
     res.send("Your account has been deleted")
 })
