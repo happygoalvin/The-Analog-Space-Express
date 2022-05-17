@@ -18,8 +18,8 @@ router.get('/', checkIfAuthenticatedJWT, async (req, res) => {
     }
 })
 
-router.post('/add', async (req, res) => {
-    let cart = new CartServices(req.body.id);
+router.post('/add', checkIfAuthenticatedJWT, async (req, res) => {
+    let cart = new CartServices(req.user.id);
     try {
         await cart.addToCart(req.body.camera_id, req.body.quantity)
         res.status(200)
@@ -30,8 +30,8 @@ router.post('/add', async (req, res) => {
     }
 })
 
-router.delete('/remove', async (req, res) => {
-    let cart = new CartServices(req.body.id);
+router.delete('/remove', checkIfAuthenticatedJWT, async (req, res) => {
+    let cart = new CartServices(req.user.id);
     try {
         await cart.removeFromCart(req.body.camera_id)
         res.status(200)
@@ -42,8 +42,8 @@ router.delete('/remove', async (req, res) => {
     }
 })
 
-router.put('/quantity/update', async (req, res) => {
-    let cart = new CartServices(req.body.id);
+router.put('/quantity/update', checkIfAuthenticatedJWT, async (req, res) => {
+    let cart = new CartServices(req.user.id);
     try {
         await cart.updateCartQuantity(req.body.camera_id, req.body.quantity)
         res.status(200)
