@@ -22,7 +22,7 @@ const getOrderById = async (orderId) => {
         id: orderId
     }).fetch({
         require: true,
-        withRelated: ['orderStatus']
+        withRelated: ['orderStatus', 'camera', 'user']
     })
 }
 

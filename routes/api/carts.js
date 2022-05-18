@@ -21,7 +21,6 @@ router.get('/', checkIfAuthenticatedJWT, async (req, res) => {
 router.post('/add', checkIfAuthenticatedJWT, async (req, res) => {
     let cart = new CartServices(req.user.id);
 
-
     try {
         await cart.addToCart(req.body.camera_id, req.body.quantity)
         res.status(200)
@@ -46,7 +45,6 @@ router.delete('/remove', checkIfAuthenticatedJWT, async (req, res) => {
 
 router.put('/quantity/update', checkIfAuthenticatedJWT, async (req, res) => {
     console.log("test 1")
-    console.log(req.body)
     let cart = new CartServices(req.user.id);
 
     console.log("test 2")

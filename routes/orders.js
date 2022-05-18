@@ -4,7 +4,8 @@ const {
     Order,
     OrderStatus,
     Purchase,
-    Camera
+    Camera,
+    Cart
 } = require('../models')
 
 const {
@@ -105,18 +106,55 @@ router.post('/:order_id/update', async (req, res) => {
     })
 })
 
-router.get('/:order_id/delete', async (req, res) => {
+router.get('/:order_id/:camera_id/delete', async (req, res) => {
     const order = await orderDAL.getOrderById(req.params.order_id)
-    res.render('orders/delete', {
-        order: order.toJSON()
+    const cameraId = req.params.camera_id;
+    const cart = await Cart.where({
+        camera_id: cameraId
+    }).fetch({
+        require: false
+    });
+
+    const cameraInOrders = await Order.where({
+        camera_id: cameraId
+    }).fetch({
+        require: false
     })
+
+
+    if (cart !== null || cameraInOrders !== null) {
+
+        req.flash("error_messages", `Unable to delete, product is in a users cart/orders`)
+        res.redirect("/orders")
+    } else {
+        res.render('orders/delete', {
+            order: order.toJSON()
+        })
+    }
 })
 
-router.post('/:order_id/delete', async (req, res) => {
+router.post('/:order_id/:camera_id/delete', async (req, res) => {
     const order = await orderDAL.getOrderById(req.params.order_id)
-    await order.destroy()
-    req.flash("success_messages", "Order has been deleted")
-    res.redirect("/orders")
+    const cameraId = req.params.camera_id
+    const cart = await Cart.where({
+        camera_id: cameraId
+    }).fetch({
+        require: false
+    });
+    const cameraInOrders = await Order.where({
+        camera_id: cameraId
+    }).fetch({
+        require: false
+    })
+
+    if (cart !== null || cameraInOrders !== null) {
+        req.flash("error_messages", `Unable to delete, product is in a users cart/orders`)
+        res.redirect("/orders")
+    } else {
+        await order.destroy()
+        req.flash("success_messages", "Order has been deleted")
+        res.redirect("/orders")
+    }
 })
 
 module.exports = router;

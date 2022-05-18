@@ -34,7 +34,7 @@
             <td>{{this.total_paid}}</td>
             <td>
                 <a class="btn btn-success btn-sm my-2" href="/orders/{{this.id}}/update">Update</a>
-                <a class="btn btn-danger btn-sm" href="/orders/{{this.id}}/delete">Delete</a>
+                <a class="btn btn-danger btn-sm" href="/orders/{{this.id}}/{{#each this.camera}}{{this.id}}{{/each}}/delete">Delete</a>
             </td>
         </tr>
         {{/each}}
