@@ -20,6 +20,8 @@ router.get('/', checkIfAuthenticatedJWT, async (req, res) => {
 
 router.post('/add', checkIfAuthenticatedJWT, async (req, res) => {
     let cart = new CartServices(req.user.id);
+
+
     try {
         await cart.addToCart(req.body.camera_id, req.body.quantity)
         res.status(200)
@@ -43,11 +45,29 @@ router.delete('/remove', checkIfAuthenticatedJWT, async (req, res) => {
 })
 
 router.put('/quantity/update', checkIfAuthenticatedJWT, async (req, res) => {
+    console.log("test 1")
+    console.log(req.body)
     let cart = new CartServices(req.user.id);
+
+    console.log("test 2")
     try {
-        await cart.updateCartQuantity(req.body.camera_id, req.body.quantity)
+        console.log("before")
+        await cart.updateCartQuantity(req.body.camera_id)
+        console.log("After")
         res.status(200)
         res.send("Quantity updated");
+    } catch (e) {
+        res.status(204)
+        res.send("Item not found")
+    }
+})
+
+router.put('/quantity/remove', checkIfAuthenticatedJWT, async (req, res) => {
+    let cart = new CartServices(req.user.id);
+    try {
+        await cart.removeCartQuantity(req.body.camera_id)
+        res.status(200)
+        res.send("Quantity Removed by 1")
     } catch (e) {
         res.status(204)
         res.send("Item not found")

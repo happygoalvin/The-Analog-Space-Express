@@ -1,10 +1,11 @@
 const {
     Cart,
-    User
+    User,
+    Camera
 } = require('../models');
 
 const getCart = async (userId) => {
-    return await Cart.collection().where({
+    return await Cart.where({
         user_id: userId
     }).fetch({
         require: false,
@@ -48,21 +49,44 @@ async function removeFromCart(userId, cameraId) {
     return false;
 }
 
-async function updateQuantity(userId, cameraId, newQuantity) {
+async function getStock(cameraId) {
+    return await Camera.where({
+        id: cameraId
+    }).fetch({
+        require: false
+    })
+}
+
+async function updateQuantity(userId, cameraId) {
     let cartItem = await getCartItemByUserAndProduct(userId, cameraId);
     if (cartItem) {
-        cartItem.set('quantity', newQuantity);
+        console.log("problem here at cart items?")
+        cartItem.set('quantity', +1);
         cartItem.save();
         return cartItem;
     }
     return false;
 }
 
+async function removeQuantity(userId, cameraId) {
+    let cartItem = await getCartItemByUserAndProduct(userId, cameraId);
+    let quantity = cartItem.get('quantity')
+    if (quantity > 0) {
+        cartItem.set('quantity', quantity - 1);
+        cartItem.save();
+        return cartItem;
+    } else {
+        removeFromCart(userId, cameraId)
+    }
+}
+
 module.exports = {
     getCart,
     getCartItemByUserAndProduct,
     createCartItem,
+    getStock,
     removeFromCart,
+    removeQuantity,
     updateQuantity,
     getUser
 }

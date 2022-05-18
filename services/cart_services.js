@@ -6,7 +6,16 @@ class CartServices {
     }
 
     async getCart() {
-        return await cartDataLayer.getCart(this.user_id);
+        let cart = await cartDataLayer.getCart(this.user_id);
+        let quantity = cart.get('quantity')
+        let cameraId = cart.get('camera_id')
+
+        // if quantity = 0, remove from cart
+        if (quantity == 0) {
+            await cartDataLayer.removeFromCart(this.user_id, cameraId)
+            return cart
+        }
+        return cart
     }
 
     async getUser() {
@@ -33,8 +42,48 @@ class CartServices {
         }
     }
 
-    async updateCartQuantity(cameraId, newQuantity) {
-        await cartDataLayer.updateQuantity(this.user_id, cameraId, newQuantity);
+    async updateCartQuantity(cameraId) {
+        let camera = await cartDataLayer.getStock(cameraId)
+        let stock = camera.get('stock')
+
+        // check if stock has run out
+        try {
+            if (stock == 0 || stock == null) {
+
+                throw "Out of stock"
+            } else {
+                let update = await cartDataLayer.updateQuantity(this.user_id, cameraId);
+                camera.set('stock', stock - 1)
+                await camera.save();
+                return update
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    async removeCartQuantity(cameraId) {
+        let cart = await cartDataLayer.getCart(this.user_id)
+        console.log(cart.toJSON())
+        let quantity = cart.get('quantity')
+        let camera = await cartDataLayer.getStock(cameraId)
+        let stock = camera.get('stock');
+
+        console.log("Before quantity < 0")
+        console.log(typeof quantity)
+        console.log(quantity)
+        console.log(typeof stock)
+        console.log(stock)
+        // if cart is empty
+        if (quantity > 0) {
+            console.log("execute")
+            console.log(typeof stock)
+            camera.set('stock', stock + 1);
+            await camera.save();
+            return await cartDataLayer.removeQuantity(this.user_id, cameraId);
+        } else if (quantity == 0) {
+            await cartDataLayer.removeFromCart(this.user_id, cameraId);
+        }
     }
 
     async removeFromCart(cameraId) {
