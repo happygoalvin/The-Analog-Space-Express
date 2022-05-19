@@ -34,7 +34,8 @@ router.get('/products', async (req, res) => {
             cam.where('cost', '<=', req.query.max_cost)
         }
     }).fetch({
-        withRelated: ['type', 'manufacturer', 'film', 'classification'];
+        require: false,
+        withRelated: ['type', 'manufacturer', 'film', 'classification']
     })
 
     res.status(200);
