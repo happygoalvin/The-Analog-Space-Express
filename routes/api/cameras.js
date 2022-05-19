@@ -28,6 +28,7 @@ router.post('/products', async (req, res) => {
     let type_id = req.body.type_id;
     let manufacturer_id = req.body.manufacturer_id
     let classification_id = req.body.classification_id
+    let film_id = req.body.film_id
 
     if (name) {
         q = q.where("name", "like", `%${name}%`)
@@ -52,6 +53,11 @@ router.post('/products', async (req, res) => {
     if (classification_id) {
         q = q.query('join', 'cameras_classifications', 'cameras.id', 'camera_id')
             .where('classification_id', 'in', classification_id.split(','))
+    }
+
+    if (film_id) {
+        q = q.query('join', 'cameras_films', 'cameras.id', 'camera_id')
+            .where('film_id', 'in', film_id.split(','))
     }
 
     let searchFilter = await q.fetch({
