@@ -20,7 +20,7 @@ router.get('/products', async (req, res) => {
 
 // search all products by returning a body
 router.post('/products', async (req, res) => {
-    let c = Camera.collection();
+    let q = Camera.collection();
 
     let name = req.body.name
     let min_cost = req.body.min_cost
@@ -29,6 +29,37 @@ router.post('/products', async (req, res) => {
     let manufacturer_id = req.body.manufacturer_id
     let classification_id = req.body.classification_id
 
+    if (name) {
+        q = q.where("name", "like", `%${name}%`)
+    }
+
+    if (min_cost) {
+        q = q.where('cost', '>=', req.query.min_cost)
+    }
+
+    if (max_cost) {
+        q = q.where('cost', '<=', req.query.max_cost)
+    }
+
+    if (type_id) {
+        q = q.where('type_id', "=", type_id)
+    }
+
+    if (manufacturer_id) {
+        q = q.where('manufacturer_id', '=', manufacturer_id)
+    }
+
+    if (classification_id) {
+        q = q.query('join', 'cameras_classifications', 'cameras.id', 'camera_id')
+            .where('classification_id', 'in', classification_id.split(','))
+    }
+
+    let searchFilter = await q.fetch({
+        withRelated: ['type', 'manufacturer', 'classification']
+    })
+
+    res.status(200);
+    res.send(searchFilter.toJSON())
 })
 
 router.get('/products/:camera_id', async (req, res) => {
