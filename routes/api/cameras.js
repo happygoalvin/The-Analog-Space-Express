@@ -61,7 +61,7 @@ router.post('/products', async (req, res) => {
     }
 
     let searchFilter = await q.fetch({
-        withRelated: ['type', 'manufacturer', 'classification']
+        withRelated: ['type', 'manufacturer', 'classification', 'film']
     })
 
     res.status(200);
