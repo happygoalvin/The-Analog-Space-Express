@@ -15,31 +15,20 @@ router.get('/classifications', async (req, res) => {
 })
 
 router.get('/products', async (req, res) => {
-    console.log("Checkpoint 1")
-    console.log(req.query.name)
-    const products = await Camera.collection().query(cam => {
-        if (req.query.name) {
-            cam.where("name", "like", `%${req.query.name}%`)
-        }
-        if (req.query.type_id != 0) {
-            cam.where("type_id", "=", req.query.type_id)
-        }
-        if (req.query.manufacturer_id != 0) {
-            cam.where("manufacturer_id", "=", req.query.manufacturer_id)
-        }
-        if (req.query.min_cost) {
-            cam.where('cost', '>=', req.query.min_cost)
-        }
-        if (req.query.max_cost) {
-            cam.where('cost', '<=', req.query.max_cost)
-        }
-    }).fetch({
-        require: false,
-        withRelated: ['type', 'manufacturer', 'film', 'classification']
-    })
+    res.send(await cameraDAL.getAllCameras());
+})
 
-    res.status(200);
-    res.send(products);
+// search all products by returning a body
+router.post('/products', async (req, res) => {
+    let c = Camera.collection();
+
+    let name = req.body.name
+    let min_cost = req.body.min_cost
+    let max_cost = req.body.max_cost
+    let type_id = req.body.type_id;
+    let manufacturer_id = req.body.manufacturer_id
+    let classification_id = req.body.classification_id
+
 })
 
 router.get('/products/:camera_id', async (req, res) => {
