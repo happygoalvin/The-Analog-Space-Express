@@ -41,11 +41,16 @@ router.post('/add', checkIfAuthenticatedJWT, async (req, res) => {
 
 router.delete('/remove', checkIfAuthenticatedJWT, async (req, res) => {
     let cart = new CartServices(req.user.id);
+    console.log(req.user)
     try {
+        console.log("Test remove status 1")
         await cart.removeFromCart(req.body.camera_id)
+        console.log("test remove status 2")
         res.status(200)
+        console.log("Remove fired")
         res.send("Item removed from cart successfully");
     } catch (e) {
+        console.log(e.message)
         res.status(204)
         res.send("Item not found")
     }
