@@ -27,6 +27,7 @@ router.post('/add', checkIfAuthenticatedJWT, async (req, res) => {
     console.log(cart)
     try {
         console.log("testing 2")
+        console.log(req.body.quantity)
         await cart.addToCart(req.body.camera_id, req.body.quantity)
         console.log("error")
         res.status(200)
