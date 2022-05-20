@@ -44,7 +44,10 @@ router.delete('/remove', checkIfAuthenticatedJWT, async (req, res) => {
     console.log(req.user)
     try {
         console.log("Test remove status 1")
+        console.log(req.data.body)
+        console.log(req.body)
         console.log(req.data)
+        console.log(req)
         await cart.removeFromCart(req.body.camera_id)
         console.log("test remove status 2")
         res.status(200)
