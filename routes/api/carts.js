@@ -10,7 +10,7 @@ router.get('/', checkIfAuthenticatedJWT, async (req, res) => {
     let cart = new CartServices(req.user.id);
     try {
         const cartItems = await cart.getCart()
-        console.log(cartItems)
+        console.log(cartItems.toJSON())
         res.status(200)
         res.send(cartItems.toJSON())
     } catch (e) {
@@ -24,7 +24,6 @@ router.post('/add', checkIfAuthenticatedJWT, async (req, res) => {
     let cart = new CartServices(req.user.id);
     console.log("testing")
 
-    console.log(cart)
     try {
         console.log("testing 2")
         console.log(req.body.quantity)
