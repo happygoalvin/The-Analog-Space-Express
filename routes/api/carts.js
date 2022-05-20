@@ -30,6 +30,7 @@ router.post('/add', checkIfAuthenticatedJWT, async (req, res) => {
         await cart.addToCart(req.body.camera_id, req.body.quantity)
         console.log("error")
         res.status(200)
+        console.log("Fired")
         res.send("Item has been added to cart successfully");
     } catch (e) {
         console.log(e.message)
