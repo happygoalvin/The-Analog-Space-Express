@@ -10,6 +10,7 @@ router.get('/', checkIfAuthenticatedJWT, async (req, res) => {
     let cart = new CartServices(req.user.id);
     try {
         const cartItems = await cart.getCart()
+        console.log(cartItems)
         res.status(200)
         res.send(cartItems.toJSON())
     } catch (e) {
@@ -19,13 +20,19 @@ router.get('/', checkIfAuthenticatedJWT, async (req, res) => {
 })
 
 router.post('/add', checkIfAuthenticatedJWT, async (req, res) => {
+    console.log(req.body)
     let cart = new CartServices(req.user.id);
+    console.log("testing")
 
+    console.log(cart)
     try {
+        console.log("testing 2")
         await cart.addToCart(req.body.camera_id, req.body.quantity)
+        console.log("error")
         res.status(200)
         res.send("Item has been added to cart successfully");
     } catch (e) {
+        console.log(e.message)
         res.status(204)
         res.send("Item not found")
     }

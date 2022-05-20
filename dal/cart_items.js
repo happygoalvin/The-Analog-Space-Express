@@ -7,7 +7,7 @@ const {
 const getCart = async (userId) => {
     return await Cart.where({
         user_id: userId
-    }).fetch({
+    }).fetchAll({
         require: false,
         withRelated: ['camera', 'camera.type', 'camera.manufacturer']
     })
@@ -36,7 +36,7 @@ async function createCartItem(userId, cameraId, quantity) {
         camera_id: cameraId,
         quantity: quantity
     })
-    await cartItem.save();
+    // await cartItem.save();
     return cartItem;
 }
 
