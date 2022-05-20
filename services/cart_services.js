@@ -27,17 +27,20 @@ class CartServices {
             this.user_id, cameraId
         )
         if (cartItem) {
+            console.log("test")
             return await cartDataLayer.initialQuantity(
                 this.user_id,
                 cameraId,
                 cartItem.get('quantity') + quantity
             )
         } else {
+            console.log("creating new cart item...")
             cartItem = await cartDataLayer.createCartItem(
                 this.user_id,
                 cameraId,
                 quantity
             )
+            console.log(cartItem)
             return cartItem;
         }
     }

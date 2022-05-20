@@ -70,7 +70,9 @@ async function updateQuantity(userId, cameraId) {
 
 async function initialQuantity(userId, cameraId, quantity) {
     let cartItem = await getCartItemByUserAndProduct(userId, cameraId);
+    console.log("init quantity")
     if (cartItem) {
+        console.log("setting quantity")
         cartItem.set('quantity', quantity);
         cartItem.save();
         return cartItem;
