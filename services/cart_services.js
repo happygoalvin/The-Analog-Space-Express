@@ -27,10 +27,10 @@ class CartServices {
             this.user_id, cameraId
         )
         if (cartItem) {
-            return await cartDataLayer.updateQuantity(
+            return await cartDataLayer.initialQuantity(
                 this.user_id,
                 cameraId,
-                cartItem.get('quantity') + quantity
+                quantity
             )
         } else {
             cartItem = await cartDataLayer.createCartItem(

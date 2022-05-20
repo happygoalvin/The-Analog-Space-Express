@@ -68,6 +68,16 @@ async function updateQuantity(userId, cameraId) {
     return false;
 }
 
+async function initialQuantity(userId, cameraId, quantity) {
+    let cartItem = await getCartItemByUserAndProduct(userId, cameraId);
+    if (cartItem) {
+        cartItem.set('quantity', quantity);
+        cartItem.save();
+        return cartItem;
+    }
+    return false;
+}
+
 async function removeQuantity(userId, cameraId) {
     let cartItem = await getCartItemByUserAndProduct(userId, cameraId);
     let quantity = cartItem.get('quantity')
@@ -88,5 +98,6 @@ module.exports = {
     removeFromCart,
     removeQuantity,
     updateQuantity,
+    initialQuantity,
     getUser
 }
