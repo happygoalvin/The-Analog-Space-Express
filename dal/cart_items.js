@@ -31,13 +31,11 @@ const getCartItemByUserAndProduct = async (userId, cameraId) => {
 }
 
 async function createCartItem(userId, cameraId, quantity) {
-    let cartItem = new Cart({
+    return new Cart({
         user_id: userId,
         camera_id: cameraId,
         quantity: quantity
     })
-    // await cartItem.save();
-    return cartItem;
 }
 
 async function removeFromCart(userId, cameraId) {
