@@ -22,13 +22,13 @@ router.get('/', checkIfAuthenticatedJWT, async (req, res) => {
 router.post('/add', checkIfAuthenticatedJWT, async (req, res) => {
     console.log(req.body)
     let cart = new CartServices(req.user.id);
-    console.log("testing")
+    console.log("Add test 1")
 
     try {
-        console.log("testing 2")
+        console.log("Add test 2")
         console.log(req.body.quantity)
-        await cart.addToCart(req.body.camera_id, req.body.quantity)
-        console.log("error")
+        await cart.addToCart(parseInt(req.body.camera_id), parseInt(req.body.quantity))
+        console.log("Add test 3")
         res.status(200)
         console.log("Fired")
         res.send("Item has been added to cart successfully");
