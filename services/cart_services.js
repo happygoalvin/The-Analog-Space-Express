@@ -52,7 +52,6 @@ class CartServices {
         // check if stock has run out
         try {
             if (stock == 0 || stock == null) {
-
                 throw "Out of stock"
             } else {
                 let update = await cartDataLayer.updateQuantity(this.user_id, cameraId);
@@ -61,7 +60,7 @@ class CartServices {
                 return update
             }
         } catch (error) {
-            console.log(error)
+            console.log(error.message)
         }
     }
 
