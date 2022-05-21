@@ -49,12 +49,16 @@ class CartServices {
         let camera = await cartDataLayer.getStock(cameraId)
         let stock = camera.get('stock')
 
+        let cartItem = await cartDataLayer.getCartItemByUserAndProduct(
+            this.user_id, cameraId
+        )
+
         // check if stock has run out
         try {
             if (stock == 0 || stock == null) {
                 throw "Out of stock"
             } else {
-                let update = await cartDataLayer.updateQuantity(this.user_id, cameraId);
+                let update = await cartDataLayer.updateQuantity(this.user_id, cameraId, cartItem.get('quantity'));
                 camera.set('stock', stock - 1)
                 await camera.save();
                 return update
