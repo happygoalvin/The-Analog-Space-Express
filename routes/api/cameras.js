@@ -35,11 +35,11 @@ router.post('/products', async (req, res) => {
     }
 
     if (min_cost) {
-        q = q.where('cost', '>=', req.query.min_cost)
+        q = q.where('cost', '>=', req.query.min_cost * 100)
     }
 
     if (max_cost) {
-        q = q.where('cost', '<=', req.query.max_cost)
+        q = q.where('cost', '<=', req.query.max_cost * 100)
     }
 
     if (type_id) {
