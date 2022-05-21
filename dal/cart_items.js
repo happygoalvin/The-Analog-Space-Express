@@ -84,6 +84,7 @@ async function removeQuantity(userId, cameraId) {
     let cartItem = await getCartItemByUserAndProduct(userId, cameraId);
     let quantity = cartItem.get('quantity')
     if (quantity > 0) {
+        console.log("Made it to remove quantity")
         cartItem.set('quantity', quantity - 1);
         await cartItem.save();
         return cartItem;
