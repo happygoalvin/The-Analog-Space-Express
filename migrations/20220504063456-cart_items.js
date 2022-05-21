@@ -51,7 +51,7 @@ exports.up = function (db) {
         mapping: 'id',
         rules: {
           onDelete: 'CASCADE',
-          onUpdate: 'RESTRICT'
+          onUpdate: 'CASCADE'
         }
       }
     }
