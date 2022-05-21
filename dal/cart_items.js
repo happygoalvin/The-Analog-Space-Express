@@ -7,7 +7,7 @@ const {
 const getCart = async (userId) => {
     return await Cart.where({
         user_id: userId
-    }).fetchAll({
+    }).fetch({
         require: false,
         withRelated: ['camera', 'camera.type', 'camera.manufacturer']
     })
