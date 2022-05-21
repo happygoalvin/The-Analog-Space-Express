@@ -6,7 +6,6 @@ const Stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const {
     User,
     Order,
-    Purchase,
 } = require('../../models');
 const {
     checkIfAuthenticatedJWT
@@ -47,6 +46,7 @@ router.get('/', checkIfAuthenticatedJWT, async (req, res) => {
         client_reference_id: user.get('id'),
         payment_method_types: ['card', 'grabpay', 'paynow'],
         line_items: lineItems,
+        billing_address_collection: 'required',
         customer_email: user.get('email'),
         success_url: process.env.STRIPE_SUCCESS_URL + '?sessionId={CHECKOUT_SESSION_ID}',
         cancel_url: process.env.STRIPE_ERROR_URL,
@@ -63,14 +63,6 @@ router.get('/', checkIfAuthenticatedJWT, async (req, res) => {
         stripeUrl: stripeSession.url,
         publishableKey: process.env.STRIPE_PUBLISHABLE_KEY
     })
-})
-
-router.get('/success', (req, res) => {
-    res.send("Stripe checkout success")
-})
-
-router.get('/error', (req, res) => {
-    res.send("Error with checkout, please try again")
 })
 
 router.post("/process_payment", express.raw({
@@ -95,6 +87,7 @@ router.post("/process_payment", express.raw({
         if (event.type == "checkout.session.completed") {
             let stripeSession = event.data.object;
             let orderDetails = JSON.parse(event.data.object.metadata.orders)
+            console.log(stripeSession)
 
             const order = new Order;
             order.set('status_id', 2); // set order status to processing
@@ -103,23 +96,18 @@ router.post("/process_payment", express.raw({
             order.set('payment_status', stripeSession.payment_status);
             order.set('total_paid', stripeSession.amount_total);
             order.set('stripe_payment_id', stripeSession.id);
-
+            order.set('address_line1', stripeSession.customer_details.address.line1)
+            order.set('address_line2', stripeSession.customer_details.address.line2)
+            order.set('address_postal_code', stripeSession.customer_details.address.postal_code)
+            orderDetails.map(cam => {
+                order.set('camera_id', cam.camera_id)
+            })
             await order.save();
-
-            for (let product of orderDetails) {
-                const purchase = new Purchase();
-                purchase.set('order_id', order.get('id'));
-                purchase.set('camera_id', product.camera_id);
-                purchase.set('quantity', product.quantity);
-                purchase.set('total_cost', stripeSession.amount_total);
-                purchase.save()
-            }
 
             const cartServices = new CartServices(stripeSession.client_reference_id);
             for (let product of orderDetails) {
                 await cartServices.removeFromCart(product.camera_id);
             }
-
         }
 
         res.send({

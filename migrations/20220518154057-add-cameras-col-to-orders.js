@@ -23,7 +23,7 @@ exports.up = function (db) {
 };
 
 exports.down = function (db) {
-  return db.dropColumn('orders')
+  return db.removeColumn('orders', 'camera_id')
 };
 
 exports._meta = {
