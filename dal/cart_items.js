@@ -57,11 +57,11 @@ async function getStock(cameraId) {
     })
 }
 
-async function updateQuantity(userId, cameraId) {
+async function updateQuantity(userId, cameraId, quantity) {
     let cartItem = await getCartItemByUserAndProduct(userId, cameraId);
     if (cartItem) {
         console.log("problem here at cart items?")
-        cartItem.set('quantity', +1);
+        cartItem.set('quantity', quantity + 1);
         await cartItem.save();
         return cartItem;
     }
