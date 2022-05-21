@@ -68,7 +68,7 @@ class CartServices {
     async removeCartQuantity(cameraId) {
         let cart = await cartDataLayer.getCart(this.user_id)
         console.log(cart.toJSON())
-        let quantity = cart.get('quantity')
+        let quantity = cart.toJSON().get('quantity')
         let camera = await cartDataLayer.getStock(cameraId)
         let stock = camera.get('stock');
 
