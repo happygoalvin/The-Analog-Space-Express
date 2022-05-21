@@ -62,7 +62,7 @@ async function updateQuantity(userId, cameraId) {
     if (cartItem) {
         console.log("problem here at cart items?")
         cartItem.set('quantity', +1);
-        cartItem.save();
+        await cartItem.save();
         return cartItem;
     }
     return false;
@@ -74,7 +74,7 @@ async function initialQuantity(userId, cameraId, quantity) {
     if (cartItem) {
         console.log("setting quantity")
         cartItem.set('quantity', quantity);
-        cartItem.save();
+        await cartItem.save();
         return cartItem;
     }
     return false;
@@ -85,7 +85,7 @@ async function removeQuantity(userId, cameraId) {
     let quantity = cartItem.get('quantity')
     if (quantity > 0) {
         cartItem.set('quantity', quantity - 1);
-        cartItem.save();
+        await cartItem.save();
         return cartItem;
     } else {
         removeFromCart(userId, cameraId)
