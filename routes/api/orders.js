@@ -40,7 +40,7 @@ router.get('/:order_id', checkIfAuthenticatedJWT, async (req, res) => {
             order_id: orderId
         }).fetchAll({
             require: false,
-            withRelated: ['camera', 'order']
+            withRelated: ['camera', 'order', 'order.user', 'order.orderStatus']
         })
         res.status(200)
         res.send(purchase.toJSON())
