@@ -6,6 +6,7 @@ const Stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const {
     User,
     Order,
+    Purchase,
 } = require('../../models');
 const {
     checkIfAuthenticatedJWT
@@ -103,6 +104,15 @@ router.post("/process_payment", express.raw({
                 order.set('camera_id', cam.camera_id)
             })
             await order.save();
+
+            for (let item of orderDetails) {
+                const purchase = new Purchase;
+                purchase.set('camera_id', item.camera_id);
+                purchase.set('order_id', order.get('id'));
+                purchase.set('quantity', item.quantity);
+                purchase.set('total_cost', stripeSession.amount_total);
+                await purchase.save();
+            }
 
             const cartServices = new CartServices(stripeSession.client_reference_id);
             for (let product of orderDetails) {
