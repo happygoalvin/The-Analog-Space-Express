@@ -102,6 +102,7 @@ router.post("/process_payment", express.raw({
             order.set('address_postal_code', stripeSession.customer_details.address.postal_code)
             orderDetails.map(cam => {
                 order.set('camera_id', cam.camera_id)
+                order.set('quantity', cam.quantity)
             })
             await order.save();
 
