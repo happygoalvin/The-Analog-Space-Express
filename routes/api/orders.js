@@ -33,14 +33,14 @@ router.get('/', checkIfAuthenticatedJWT, async (req, res) => {
     }
 })
 
-router.get('/items', checkIfAuthenticatedJWT, async (req, res) => {
-    const orderId = req.body.order_id;
+router.get('/:order_id', checkIfAuthenticatedJWT, async (req, res) => {
+    const orderId = req.params.order_id;
     try {
-        const purchase = await Purchase.where({
-            order_id: orderId
-        }).fetchAll({
+        const purchase = await Order.where({
+            id: orderId
+        }).fetch({
             require: false,
-            withRelated: ['camera', 'camera.type', 'camera.manufacturer']
+            withRelated: ['camera', 'camera.type', 'camera.manufacturer', 'orderStatus']
         })
         res.status(200)
         res.send(purchase.toJSON())
