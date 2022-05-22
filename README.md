@@ -50,23 +50,41 @@ GET | /api/orders/:order_id | Retrieves all purchase data from a specific order 
 
 - [Express.js](https://expressjs.com/)
 
-  This project utilises Express.js. A fast, unopinionated, minimalist web framework for Node.js
+  - This project utilises Express.js. A fast, unopinionated, minimalist web framework for Node.js
 
 - [Postgres](https://www.postgresql.org/)
 
-  Heroku deploys postgres SQL
+  - Heroku deploys postgres SQL
 
 - [MySql](https://www.mysql.com/)
 
-  Used for testing in local environment and building migration files
+  - Used for testing in local environment and building migration files
 
 - [BookShelf ORM](https://bookshelfjs.org/)
 
-  Used for Object-Relational Mapping
+  - Used for Object-Relational Mapping
 
 - [db migrate](https://www.npmjs.com/package/db-migrate)
 
-  To allow for migration of data from MySQL to postgres 
+  - To allow for migration of data from MySQL to postgres 
+
+- [Heroku](https://devcenter.heroku.com/articles/getting-started-with-nodejs)
+
+  - For deployment of API endpoint
+
+- [ERDPlus](https://erdplus.com/)
+
+  - For creation of ER diagram
+
+- [SqlDBM](https://sqldbm.com/Home/)
+
+  - For creation of Logical Schema diagram
+
+  
+
+
+
+
 
 # Deployment
 
