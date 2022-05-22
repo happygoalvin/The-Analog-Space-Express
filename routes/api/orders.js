@@ -38,7 +38,7 @@ router.get('/:order_id', checkIfAuthenticatedJWT, async (req, res) => {
     try {
         const purchase = await Purchase.where({
             order_id: orderId
-        }).fetch({
+        }).fetchAll({
             require: false,
             withRelated: ['camera', 'order']
         })
