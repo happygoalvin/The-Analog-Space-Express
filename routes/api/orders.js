@@ -17,7 +17,7 @@ router.get('/', checkIfAuthenticatedJWT, async (req, res) => {
             user_id: userId
         }).fetchAll({
             require: false,
-            withRelated: ['camera']
+            withRelated: ['camera', 'orderStatus']
         })
         console.log("after getting orders")
         if (order) {
