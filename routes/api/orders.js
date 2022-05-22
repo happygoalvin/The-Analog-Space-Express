@@ -36,11 +36,11 @@ router.get('/', checkIfAuthenticatedJWT, async (req, res) => {
 router.get('/:order_id', checkIfAuthenticatedJWT, async (req, res) => {
     const orderId = req.params.order_id;
     try {
-        const purchase = await Order.where({
-            id: orderId
+        const purchase = await Purchase.where({
+            order_id: orderId
         }).fetch({
             require: false,
-            withRelated: ['camera', 'camera.type', 'camera.manufacturer', 'orderStatus', 'purchase']
+            withRelated: ['camera', 'order']
         })
         res.status(200)
         res.send(purchase.toJSON())
