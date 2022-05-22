@@ -3,7 +3,8 @@ const {
     checkIfAuthenticatedJWT
 } = require('../../middlewares');
 const {
-    Order
+    Order,
+    Purchase
 } = require('../../models');
 const router = express.Router();
 
@@ -28,6 +29,23 @@ router.get('/', checkIfAuthenticatedJWT, async (req, res) => {
             res.send("No orders found")
         }
     } catch (e) {
+        console.log(e.message)
+    }
+})
+
+router.get('/items', checkIfAuthenticatedJWT, async (req, res) => {
+    const orderId = req.body.order_id;
+    try {
+        const purchase = await Purchase.where({
+            order_id: orderId
+        }).fetchAll({
+            require: false,
+            withRelated: ['camera', 'camera.type', 'camera.manufacturer']
+        })
+        res.status(200)
+        res.send(purchase.toJSON())
+    } catch (e) {
+        res.status(204)
         console.log(e.message)
     }
 })
